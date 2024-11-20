@@ -7,7 +7,7 @@ const Welcome = () => {
   return (
     <>
     <main className='w-full h-screen relative'>
-        <h2 className='absolute  top-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-white'>Order and Pay here</h2>
+        <h1 className='absolute  top-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-white'>Order and Pay here</h1>
         <img src={`${imgPath}/welcome-banner.jpg`} alt="" className='h-full block object-cover'/>
 
         <div className='absolute w-full bottom-0 left-0'>
@@ -41,4 +41,4 @@ const Welcome = () => {
   );
 };
 
-export default Welcome
+export default Welcome;

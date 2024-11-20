@@ -13,6 +13,7 @@ const SliderBanner = () => {
         slidesToShow: 1,
         slidesToScroll: 1,
         autoPlay: true,
+        autoplaySpeed: 3000,
       };
   return (
     <Slider {...settings}>

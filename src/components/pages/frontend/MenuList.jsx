@@ -1,62 +1,45 @@
-import { imgPath } from '@/components/helpers/functions-general'
-import React from 'react'
+import { imgPath } from '@/components/helpers/functions-general';
+import React from 'react';
+import { menus } from '../backend/menu-data';
 
-const MenuList = () => {
+const MenuList = ({ category, cartData, setCartData, setIsSuccess }) => {
+   const menuFilter = menus.filter((item) => item.menu_category === category);
+
+   const handleAdd = (item) => {
+      const exist = cartData.find((data) => data.menu_aid === item.menu_aid);
+      if (exist !== undefined) {
+        setCartData(
+          cartData.map((cart) =>
+            cart.menu_aid === item.menu_aid
+              ? { ...exist, quantity: exist.quantity + 1 }
+              : cart
+          )
+        );
+      } else {
+        setCartData([...cartData, { ...item, quantity: 1 }]);
+      }
+      setIsSuccess(true);
+    };
+
+   // console.log(menuFilter);
+
+   console.log(cartData);
+
   return (
-    <div className='grid grid-cols-3 gap-4'>
-       <button>
-          <img src={`${imgPath}/nav-burger.webp`} alt=""/> 
-          <h6 className='font-bold'>Regular Yumburger</h6>
-          <p className='text-sm'>P 150.00</p>
+    <div className='grid grid-cols-3 gap-4 p-4'>
+      {menuFilter.map((item, key) => (
+          <button key={key} onClick={() => handleAdd(item)}>  
+          <img 
+          src={`${imgPath}/${item.menu_image}`} 
+          alt="" 
+          className='w-[80%] mx-auto mb-2'
+          /> 
+          <h6 className='font-bold text-sm'>{item.menu_title}</h6>
+          <p className='text-sm'>P{item.menu_price}</p>
        </button>
-       <button>
-          <img src={`${imgPath}/nav-burger.webp`} alt=""/> 
-          <h6>Regular Yumburger</h6>
-          <p>P 150.00</p>
-       </button>
-       <button>
-          <img src={`${imgPath}/nav-burger.webp`} alt=""/> 
-          <h6>Regular Yumburger</h6>
-          <p>P 150.00</p>
-       </button>
-       <button>
-          <img src={`${imgPath}/nav-burger.webp`} alt=""/> 
-          <h6>Regular Yumburger</h6>
-          <p>P 150.00</p>
-       </button>
-       <button>
-          <img src={`${imgPath}/nav-burger.webp`} alt=""/> 
-          <h6>Regular Yumburger</h6>
-          <p>P 150.00</p>
-       </button>
-       <button>
-          <img src={`${imgPath}/nav-burger.webp`} alt=""/> 
-          <h6>Regular Yumburger</h6>
-          <p>P 150.00</p>
-       </button>
-       <button>
-          <img src={`${imgPath}/nav-burger.webp`} alt=""/> 
-          <h6>Regular Yumburger</h6>
-          <p>P 150.00</p>
-       </button>
-       <button>
-          <img src={`${imgPath}/nav-burger.webp`} alt=""/> 
-          <h6>Regular Yumburger</h6>
-          <p>P 150.00</p>
-       </button>
-       <button>
-          <img src={`${imgPath}/nav-burger.webp`} alt=""/> 
-          <h6>Regular Yumburger</h6>
-          <p>P 150.00</p>
-       </button>
-       <button>
-          <img src={`${imgPath}/nav-burger.webp`} alt=""/> 
-          <h6>Regular Yumburger</h6>
-          <p>P 150.00</p>
-       </button>
-        
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default MenuList
+export default MenuList;
