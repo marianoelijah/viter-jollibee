@@ -1,17 +1,17 @@
-import React from 'react'
-import { menus } from '../menu-data';
+import React from "react";
+import { menus } from "../menu-data";
 
-const DashboardCard = ({ title = "", filterby ="", }) => {
+const DashboardCard = ({ title = "", filterby = "" }) => {
+  const getCardDetails = menus.filter(
+    (item) => item.menu_category === filterby
+  );
 
-    const getCardDetails = menus.filter((item) => item.category === filterby);
+  const getActiveMenu = getCardDetails.filter(
+    (item) => item.menu_is_active === true
+  );
 
-    const getActiveMenu = getCardDetails.filter((item) => item.menu_is_active === true );
-    
-
-    // console.log(getCardDetails);
   return (
     <>
-               
       <div className="card bg-secondary p-4 rounded-md border border-line">
         <small>{title}</small>
         <h2 className="text-4xl mt-1 mb-2">{getCardDetails.length}</h2>
@@ -26,9 +26,8 @@ const DashboardCard = ({ title = "", filterby ="", }) => {
           </li>
         </ul>
       </div>
-                 
     </>
-  )
-}
+  );
+};
 
 export default DashboardCard;
