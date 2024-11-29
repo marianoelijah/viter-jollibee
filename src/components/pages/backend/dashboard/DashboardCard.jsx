@@ -17,7 +17,7 @@ const DashboardCard = ({ title = "", filterby = "" }) => {
         <h2 className="text-4xl mt-1 mb-2">{getCardDetails.length}</h2>
         <ul className="flex gap-5 items-center">
           <li className="flex items-center gap-2">
-            <span className="size-3 rounded-full bg-success block"></span>
+            <span className="size-2 rounded-full bg-success block"></span>
             {getActiveMenu.length} active
           </li>
           <li className="flex items-center gap-2">

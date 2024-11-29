@@ -4,7 +4,7 @@ import Welcome from "./components/pages/frontend/Welcome";
 import Order from "./components/pages/frontend/Order";
 import Advertisement from "./components/pages/backend/advertisement/Advertisement";
 import { StoreProvider } from "./components/store/storeContext";
-import Foods from "./components/pages/backend/foods/Food";
+import Foods from "./components/pages/backend/foods/Foods";
 import Category from "./components/pages/backend/category/Category";
 import Dashboard from "./components/pages/backend/dashboard/Dashboard";
 import { LogIn } from "lucide-react";

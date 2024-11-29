@@ -4,27 +4,27 @@ import { Plus } from "lucide-react";
 import React from "react";
 import Footer from "../partials/Footer";
 import Header from "../partials/Header";
-import ModalError from "../partials/modals/ModalError";
-import ModalValidation from "../partials/modals/ModalValidation";
 import SearchBar from "../partials/SearchBar";
 import SideNavigation from "../partials/SideNavigation";
-import ToastSuccess from "../partials/ToastSuccess";
-import CategoryTable from "./CategoryTable";
-import ModalAddCategory from "./ModalAddCategory";
+import ModalAddFood from "./ModalAddFood";
+import FoodTable from "./FoodTable";
+import ModalError from "../partials/modals/ModalError";
 
-const Category = () => {
+const Foods = () => {
   const { dispatch, store } = React.useContext(StoreContext);
+  const [itemEdit, setItemEdit] = React.useState(null);
 
   const handleAdd = () => {
     dispatch(setIsAdd(true));
+    setItemEdit(null);
   };
   return (
     <>
       <section className="layout-main">
         <div className="layout-division">
-          <SideNavigation menu="category" />
+          <SideNavigation menu="foods" />
           <main>
-            <Header title="Category" subtitle="Manage Kiosk Category" />
+            <Header title="Foods" subtitle="Manage Kiosk Foods" />
             <div className="p-8">
               <div className="flex justify-between items-center ">
                 <SearchBar />
@@ -34,7 +34,7 @@ const Category = () => {
                   Add New
                 </button>
               </div>
-              <CategoryTable />
+              <FoodTable setItemEdit={setItemEdit} />
             </div>
             <Footer />
           </main>
@@ -44,11 +44,9 @@ const Category = () => {
       {store.validate && <ModalValidation />}
       {store.error && <ModalError />}
       {store.success && <ToastSuccess />}
-      {/* <SpinnerWindow /> */}
-
-      {store.isAdd && <ModalAddCategory />}
+      {store.isAdd && <ModalAddFood itemEdit={itemEdit} />}
     </>
   );
 };
 
-export default Category;
+export default Foods;
