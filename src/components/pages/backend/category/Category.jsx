@@ -4,17 +4,16 @@ import SideNavigation from '../partials/SideNavigation'
 import Header from '../partials/Header'
 import Footer from '../partials/Footer'
 import SearchBar from '../partials/SearchBar'
+import CategoryyTable from './CategoryTable'
 import { StoreContext } from '@/components/store/storeContext'
+import ModalAddCategoryy from './ModalAddCategoryy'
 import ToastSuccess from '../partials/ToastSuccess'
 import ModalError from '../partials/modals/ModalError'
 import ModalValidation from '../partials/modals/ModalValidation'
 import { setIsAdd } from '@/components/store/storeAction'
-import CategoryTable from './CategoryTable'
-import ModalAddCategory from './ModalAddCategory'
 
-const Category = () => {
+const Categoryy = () => {
   const { dispatch, store } = React.useContext(StoreContext);
-  const [isCategoryEdit, setIsCategoryEdit] = React.useState(null);
 
   const handleAdd = () => {
     dispatch(setIsAdd(true));
@@ -23,36 +22,29 @@ const Category = () => {
     <>
         <section className="layout-main">
         <div className="layout-division">
-          <SideNavigation menu="category"/>
+          <SideNavigation menu="categoryy" />
           <main>
-            <Header title="Category" 
-             subtitle="Manage Kiosk Category"/>
+            <Header title="Categoryy" subtitle="Manage Kiosk Categoryy" />
             <div className="p-8">
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center ">
                 <SearchBar />
                 <button className="btn btn-add" onClick={handleAdd}>
                   <Plus size={16} />
                   Add New
                 </button>
               </div>
-              <CategoryTable 
-              isCategoryEdit={isCategoryEdit}
-              setIsCategoryEdit={setIsCategoryEdit}
-              />
+              <CategoryyTable />
             </div>
             <Footer />
           </main>
         </div>
       </section>
-      {store.validate && <ModalValidation/>}
+      {store.validate && <ModalValidation />}
       {store.error && <ModalError />}
       {store.success && <ToastSuccess />}
-      {store.isAdd && <ModalAddCategory 
-      setIsAdd={setIsAdd}
-      isCategoryEdit={isCategoryEdit} 
-      setIsCategoryEdit={setIsCategoryEdit}/>}
+      {store.isAdd && <ModalAddCategoryy />}
     </>
   )
 }
 
-export default Category
+export default Categoryy

@@ -25,28 +25,31 @@ const Dashboard = () => {
           <SideNavigation menu="dashboard" />
           <main>
             <Header title="Dashboard" subtitle="Welcome to Jollibee!" />
-            <div className="p-8">
+            <div className="px-4">
               <div className="grid grid-cols-[1fr_400px] gap-5">
                 <div className="stats">
                   <div className="grid grid-cols-4 gap-5">
-                    <DashboardCard title="Chicken joy" filterby="Chickenjoy" />
-                    <DashboardCard title="Value Meal" filterby="Valuemeal" />
-                    <DashboardCard title="Burger" filterby="Burger" />
+                    <DashboardCard title="Chickenjoy" filterby="Chickenjoy" />
+                    <DashboardCard title="Value Meal" filterby="Value Meal" />
+                    <DashboardCard title="Yum Burger" filterby="Yum Burger" />
+                    <DashboardCard
+                      title="Burger Steak"
+                      filterby="Burger Steak"
+                    />
                     <DashboardCard title="Spaghetti" filterby="Spaghetti" />
                     <DashboardCard title="Palabok" filterby="Palabok" />
                     <DashboardCard title="Sides" filterby="Sides" />
                     <DashboardCard title="Desserts" filterby="Desserts" />
-                    <DashboardCard title="Desserts" filterby="Desserts" />
                   </div>
 
                   <div className="chart mt-10">
-                    <h1>Menu Prices</h1>
+                    <h3>Menu Prices</h3>
                     <BarChart
                       width={1200}
                       height={400}
                       data={menus.slice(0, 4)}
                       margin={{
-                        top: 5,
+                        top: 10,
                         right: 30,
                         left: 20,
                         bottom: 5,

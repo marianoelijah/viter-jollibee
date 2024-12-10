@@ -1,5 +1,4 @@
 import {
-  setIsAdd,
     setIsConfirm,
     setIsDelete,
     setIsEdit,
@@ -15,24 +14,20 @@ import {
   import LoadMore from "../partials/LoadMore";
   import ModalConfirm from "../partials/modals/ModalConfirm";
   import ModalDelete from "../partials/modals/ModalDelete";
-import useQueryData from "@/components/custom-hook/useQueryData";
-import Status from "@/components/partials/Status";
+  import Pills from "../partials/Pills";
 
   
-  const CategoryTable = ({ setIsCategoryEdit }) => {
+  const CategoryyTable = () => {
     const { store, dispatch } = React.useContext(StoreContext);
-    const [id, setIsId] = React.useState("");
     
     let counter = 1;
   
-    const handleEdit = (item) => {
-      dispatch(setIsAdd(true));
-      setIsCategoryEdit(item)
+    const handleEdit = () => {
+      dispatch(setIsEdit(true));
     };
   
     const handleDelete = () => {
       dispatch(setIsDelete(true));
-      setIsId(item)
     };
   
     const handleRestore = () => {
@@ -42,17 +37,6 @@ import Status from "@/components/partials/Status";
     const handleArchive = () => {
       dispatch(setIsConfirm(true));
     };
-
-    const {
-      isFetching,
-      error,
-      data:result,
-      status,
-    } = useQueryData(
-      `/v2/category`, //endpoint
-      "get", //method
-      "other" //key
-    );
   
     return (
       <>
@@ -80,71 +64,64 @@ import Status from "@/components/partials/Status";
                     <IconServerError />
                   </td>
                 </tr> */}
-               {result?.count > 0 && 
-               result.data.map((item, key) => (
-                <tr key={key}>
-                <td>{counter++}.</td>
-                <td>
-                  {item.category_is_active === 1 ? (
-                    <Status text="Active" />
-                  ):(
-                    <Status text="Inactive" />
-                  )}
-                  
-                </td>
-                <td>{item.category_title}</td>
+               {Array.from(Array(6).keys()).map((i) => (
+                 <tr key={i}>
+                 <td>{counter++}.</td>
+                 <td>
+                   <Pills />
+                 </td>
+                 <td>Categoryy 1</td>
 
-                <td>
-                  <ul className="table-action">
-                    {item.category_is_active ? (
-                      <>
-                        
-                        <li>
-                          <button
-                            className="tooltip"
-                            data-tooltip="Edit"
-                            onClick={() => handleEdit(item)}
-                          >
-                            <FilePenLine />
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            className="tooltip"
-                            data-tooltip="Archive"
-                            onClick={() => handleArchive(item)}
-                          >
-                            <Archive />
-                          </button>
-                        </li>
-                      </>
-                    ) : (
-                      <>
-                        <li>
-                          <button
-                            className="tooltip"
-                            data-tooltip="Restore"
-                            onClick={() => handleRestore(item)}
-                          >
-                            <ArchiveRestore />
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            className="tool-tip"
-                            data-tooltip="Delete"
-                            onClick={handleDelete}
-                          >
-                            <Trash2 />
-                          </button>
-                        </li>
-                      </>
-                    )}
-                  </ul>
-                </td>
-              </tr>
-               ))
-               }
+                 <td>
+                   <ul className="table-action">
+                     {true ? (
+                       <>
+                         
+                         <li>
+                           <button
+                             className="tooltip"
+                             data-tooltip="Edit"
+                             onClick={() => handleEdit()}
+                           >
+                             <FilePenLine />
+                           </button>
+                         </li>
+                         <li>
+                           <button
+                             className="tooltip"
+                             data-tooltip="Archive"
+                             onClick={() => handleArchive()}
+                           >
+                             <Archive />
+                           </button>
+                         </li>
+                       </>
+                     ) : (
+                       <>
+                         <li>
+                           <button
+                             className="tooltip"
+                             data-tooltip="Restore"
+                             onClick={() => handleRestore()}
+                           >
+                             <ArchiveRestore />
+                           </button>
+                         </li>
+                         <li>
+                           <button
+                             className="tool-tip"
+                             data-tooltip="Delete"
+                             onClick={handleDelete}
+                           >
+                             <Trash2 />
+                           </button>
+                         </li>
+                       </>
+                     )}
+                   </ul>
+                 </td>
+               </tr>
+               ))}
                  
                
               </tbody>
@@ -161,4 +138,4 @@ import Status from "@/components/partials/Status";
     );
   };
   
-  export default CategoryTable;
+  export default CategoryyTable;
