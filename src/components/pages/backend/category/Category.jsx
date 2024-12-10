@@ -14,6 +14,7 @@ import ModalAddCategory from './ModalAddCategory'
 
 const Category = () => {
   const { dispatch, store } = React.useContext(StoreContext);
+  const [isCategoryEdit, setIsCategoryEdit] = React.useState(null);
 
   const handleAdd = () => {
     dispatch(setIsAdd(true));
@@ -22,27 +23,34 @@ const Category = () => {
     <>
         <section className="layout-main">
         <div className="layout-division">
-          <SideNavigation menu="category" />
+          <SideNavigation menu="category"/>
           <main>
-            <Header title="Category" subtitle="Manage Kiosk Category" />
+            <Header title="Category" 
+             subtitle="Manage Kiosk Category"/>
             <div className="p-8">
-              <div className="flex justify-between items-center ">
+              <div className="flex justify-between items-center">
                 <SearchBar />
                 <button className="btn btn-add" onClick={handleAdd}>
                   <Plus size={16} />
                   Add New
                 </button>
               </div>
-              <CategoryTable />
+              <CategoryTable 
+              isCategoryEdit={isCategoryEdit}
+              setIsCategoryEdit={setIsCategoryEdit}
+              />
             </div>
             <Footer />
           </main>
         </div>
       </section>
-      {store.validate && <ModalValidation />}
+      {store.validate && <ModalValidation/>}
       {store.error && <ModalError />}
       {store.success && <ToastSuccess />}
-      {store.isAdd && <ModalAddCategory />}
+      {store.isAdd && <ModalAddCategory 
+      setIsAdd={setIsAdd}
+      isCategoryEdit={isCategoryEdit} 
+      setIsCategoryEdit={setIsCategoryEdit}/>}
     </>
   )
 }

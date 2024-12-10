@@ -67,12 +67,13 @@ const Dashboard = () => {
                 </div>
 
                 <aside className="sidebar custom-scroll h-[calc(100vh-200px)] overflow-auto">
+                  <DashboardAccordion title="Chicken joy" filterby="Chickenjoy" />
+                  <DashboardAccordion title="Value Meal" filterby="Valuemeal" />
+                  <DashboardAccordion title="Burger" filterby="Burger" />
                   <DashboardAccordion title="Spaghetti" filterby="Spaghetti" />
-                  <DashboardAccordion title="Spaghetti" filterby="Spaghetti" />
-                  <DashboardAccordion title="Spaghetti" filterby="Spaghetti" />
-                  <DashboardAccordion title="Spaghetti" filterby="Spaghetti" />
-                  <DashboardAccordion title="Spaghetti" filterby="Spaghetti" />
-                  <DashboardAccordion title="Spaghetti" filterby="Spaghetti" />
+                  <DashboardAccordion title="Palabok" filterby="Palabok" />
+                  <DashboardAccordion title="Sides" filterby="Sides" />
+                  <DashboardCard title="Desserts" filterby="Desserts" />
                 </aside>
               </div>
             </div>

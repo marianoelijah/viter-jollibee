@@ -112,6 +112,7 @@ const  ModalAddFoods = ({ itemEdit }) => {
                 name="menu_price"
                 />
               </div>
+              
               <div className="input-wrap">
                 <label htmlFor="">Category</label>
                 <InputSelect label="Category" name="movie_category">

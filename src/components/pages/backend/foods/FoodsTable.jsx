@@ -98,7 +98,7 @@ import { menus } from "../menu-data";
                           <button
                             className="tooltip"
                             data-tooltip="Archive"
-                            onClick={() => handleArchive()}
+                            onClick={() => handleArchive(item)}
                           >
                             <Archive />
                           </button>
@@ -110,7 +110,7 @@ import { menus } from "../menu-data";
                           <button
                             className="tooltip"
                             data-tooltip="Restore"
-                            onClick={() => handleRestore()}
+                            onClick={() => handleRestore(item)}
                           >
                             <ArchiveRestore />
                           </button>

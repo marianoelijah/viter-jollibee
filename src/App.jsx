@@ -7,13 +7,16 @@ import { StoreProvider } from "./components/store/storeContext";
 import Foods from "./components/pages/backend/foods/Food";
 import Category from "./components/pages/backend/category/Category";
 import Dashboard from "./components/pages/backend/dashboard/Dashboard";
-import { LogIn } from "lucide-react";
+
 import SetPassword from "./components/pages/backend/access/SetPassword";
 import ForgotPassword from "./components/pages/backend/access/ForgotPassword";
 import Login from "./components/pages/backend/access/Login";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const App = () => {
+  const queryClient = new QueryClient();
   return (
+    <QueryClientProvider client={queryClient}>
     <StoreProvider >
       <Router>
        <Routes>
@@ -30,6 +33,7 @@ const App = () => {
        </Routes>
       </Router>
     </StoreProvider>
+    </QueryClientProvider>
   
   );
 };

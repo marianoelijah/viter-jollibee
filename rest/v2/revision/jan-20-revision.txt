@@ -1,0 +1,7 @@
+UPLOAD
+
+===> Database table
+1. rest/db-backup/hrisv2_settings_job_title.sql
+===> API
+1. rest/v1/controllers/settings/job-title
+2. rest/v1/models/settings/job-title

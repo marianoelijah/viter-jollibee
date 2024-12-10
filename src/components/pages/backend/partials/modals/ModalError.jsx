@@ -19,7 +19,8 @@ const ModalError = () => {
             <h5>Something went wrong</h5>
             <p className="my-5 text-center">{store.message}</p>
 
-            <button className="btn btn-alert w-full flex justify-center" onClick={handleClose}>Okay</button>
+            <button className="btn btn-alert w-full flex justify-center" 
+            onClick={handleClose}>Okay</button>
           </div>
         </div>
       </div>

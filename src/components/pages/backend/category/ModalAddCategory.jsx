@@ -3,22 +3,49 @@ import ModalWrapper from "../partials/modals/ModalWrapper";
 import { ImagePlusIcon, X } from "lucide-react";
 import SpinnerButton from "../partials/spinners/SpinnerButton";
 import { StoreContext } from "@/components/store/storeContext";
-import { setIsAdd } from "@/components/store/storeAction";
+import { setIsAdd, setIsEdit } from "@/components/store/storeAction";
 import { Form, Formik } from "formik";
 import { InputPhotoUpload, InputText } from "@/components/helpers/FormInputs";
 import * as Yup from "Yup";
 import useUploadPhoto from "@/components/custom-hook/useUploadPhoto";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useQueryData from "@/components/custom-hook/useQueryData";
+import { queryData } from "@/components/helpers/queryData";
 
-const  ModalAddCategory  = () => {
+const  ModalAddCategory = () => {
   const { dispatch } = React.useContext(StoreContext);
   const { uploadPhoto, handleChangePhoto, photo } = useUploadPhoto("");
+  const [value, setValue] = React.useState("");
 
   const handleClose = () => {
     dispatch(setIsAdd(false));
   };
 
+  const handleChange = () => {
+    setValue(event.target.value);
+  };
+
+  const {
+    isFetching,
+    error,
+    data:result,
+    status,
+  } = useQueryData(
+    `/v2/category`, //endpoint
+    "get", //method
+    "other" //key
+  );
+
+  // const queryClient = useQueryClient();
+  // const mutation = useMutation({
+  //   queryData(
+  //     isCategoryEdit
+  //     ? `v2/category/${isCategoryEdit.category_aid}`
+  //   )
+  // })
+
   const initVal = {
-    category_title : "",
+    category_title : "isCategoryEdit ? isCategoryEdit.category_title : ",
     
   }
 
@@ -32,7 +59,9 @@ const  ModalAddCategory  = () => {
       <ModalWrapper>
         <div className="main-side absolute top-0 right-0 bg-primary h-[100dvh] w-[300px] border-l border-line">
           <div className="modal-header p-4 flex justify-between items-center">
-            <h5 className="mb-0 leading-none">Add Category</h5>
+            <h5 className="mb-0 leading-none">
+              Add Category
+            </h5>
             <button onClick={handleClose}>
               <X />
             </button>
@@ -42,7 +71,7 @@ const  ModalAddCategory  = () => {
           <Formik
         initialValues={initVal}
         validationSchema={yupSchema}
-        onSubmit={async (values) => {
+        onSubmit={async (values, { SetSubmitting, resetForm}) => {
           console.log(values)
         }}
       >
@@ -51,7 +80,7 @@ const  ModalAddCategory  = () => {
             <Form>
 
           <div className="modal-form  h-full max-h-[calc(100vh-56px)] grid grid-rows-[1fr_auto]">
-            <div className="form-wrapper p-4 max-h-[85vh] h-full overflow-y-auto custom-scroll ">
+            <div className="form-wrapper p-4 max-h-[85vh] h-full overflow-y-auto custom-scroll">
             
             <div className="input-wrap">
                 <InputText 
@@ -61,7 +90,7 @@ const  ModalAddCategory  = () => {
                 />
               </div>
              
-              <div className="input-wrap relative  group input-photo-wrap h-[150px]">
+              {/* <div className="input-wrap relative  group input-photo-wrap h-[150px]">
               <label htmlFor="">Photo</label>
                 {photo === null ? (
                   <div className="w-full border border-line rounded-md flex justify-center items-center flex-col h-full">
@@ -96,7 +125,7 @@ const  ModalAddCategory  = () => {
                           onDrop={(e) => handleChangePhoto(e)}
                           className={`opacity-0 absolute top-0 right-0 bottom-0 left-0 rounded-full  m-auto cursor-pointer w-full h-full`}
                         />
-              </div>
+              </div> */}
               
               
               
@@ -104,10 +133,11 @@ const  ModalAddCategory  = () => {
             </div>
             <div className="form-action flex p-4 justify-end gap-3">
               <button className="btn btn-info bg-myred" type="submit">
-                <SpinnerButton />
+                <SpinnerButton/>
                 Save
               </button>
-              <button className="btn btn-cancel" onClick={handleClose} type="reset">
+              <button className="btn btn-cancel" 
+              onClick={handleClose} type="reset">
                 Cancel
               </button>
             </div>
