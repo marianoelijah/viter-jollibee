@@ -10,6 +10,7 @@ import SideNavigation from "../partials/SideNavigation";
 import ModalError from "../partials/modals/ModalError";
 import ModalAddFoods from "./ModalAddFoods";
 import FoodsTable from "./FoodsTable";
+import ToastSuccess from "../partials/ToastSuccess";
 
 const Foods = () => {
   const { dispatch, store } = React.useContext(StoreContext);
@@ -23,7 +24,7 @@ const Foods = () => {
     <>
       <section className="layout-main">
         <div className="layout-division">
-          <SideNavigation menu="foods" />
+          <SideNavigation menu="foods"  submenu="users"/>
           <main>
             <Header title="Foods" subtitle="Manage Kiosk Foods" />
             <div className="p-8">
@@ -35,7 +36,7 @@ const Foods = () => {
                   Add New
                 </button>
               </div>
-              <FoodsTable setItemEdit={setItemEdit} />
+              <FoodsTable setIsAdd={setIsAdd} setItemEdit={setItemEdit} />
             </div>
             <Footer />
           </main>

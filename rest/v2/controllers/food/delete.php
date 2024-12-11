@@ -3,19 +3,19 @@
 $conn = null;
 $conn = checkDbConnection();
 // make instance of classes
-$other = new Other($conn);
+$food = new Food($conn);
 // get $_GET data
 $error = [];
 $returnData = [];
-if (array_key_exists("otherid", $_GET)) {
+if (array_key_exists("foodid", $_GET)) {
   // get data
-  $other->other_aid = $_GET['otherid'];
-  checkId($other->other_aid);
+  $food->food_aid = $_GET['foodid'];
+  checkId($food->food_aid);
   
 
-  $query = checkDelete($other);
+  $query = checkDelete($food);
 
-  returnSuccess($other, "other", $query);
+  returnSuccess($food, "food", $query);
 }
 
 // return 404 error if endpoint not available

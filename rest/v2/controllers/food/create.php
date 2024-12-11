@@ -11,6 +11,7 @@ checkPayload($data);
 // get data
 $food->food_is_active = 1;
 $food->food_title = checkIndex($data, "food_title");
+$food->food_category_id = checkIndex($data, "food_category_id");
 $food->food_created = date("Y-m-d H:i:s");
 $food->food_datetime = date("Y-m-d H:i:s");
 

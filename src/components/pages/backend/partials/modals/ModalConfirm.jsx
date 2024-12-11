@@ -3,10 +3,40 @@ import React from "react";
 import ModalWrapper from "./ModalWrapper";
 import { setIsConfirm } from "@/components/store/storeAction";
 import { StoreContext } from "@/components/store/storeContext";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import ButtonSpinner from "@/components/partials/spinner/ButtonSpinner";
 
 const ModalConfirm = () => {
   const { dispatch } = React.useContext(StoreContext);
-  const handleClose = () => dispatch(setIsConfirm(false));
+
+  const handleClose = () => {
+    dispatch(setIsConfirm(false));
+  };
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (values) => queryData(mysqlEndpoint, "put", values),
+    onSuccess: (data) => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      // dispatch(setIsDelete(false));
+
+      if (!data.success) {
+        console.log("May error!");
+      } else {
+        dispatch(setIsArchive(false));
+        console.log("Naysuu!");
+      }
+    },
+  });
+
+  const handleYes = async () => {
+    // mutate data
+    mutation.mutate({
+      isActive: 0,
+    });
+  };
 
   return (
     <>
@@ -27,8 +57,9 @@ const ModalConfirm = () => {
               Are you sure you want to archive this category?
             </p>
             <div className="flex justify-end gap-3 mt-5">
-              <button className="btn btn-warning">
-                Archive
+              <button className="btn btn-warning"
+              onClick={handleYes}>
+                {mutation.isPending ? <ButtonSpinner /> : "Yes"}
               </button>
               <button className="btn btn-cancel"
                onClick={handleClose}>

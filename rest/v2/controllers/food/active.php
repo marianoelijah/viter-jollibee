@@ -1,11 +1,11 @@
 <?php
 // set http header
-require '../../../../core/header.php';
+require '../../core/header.php';
 // use needed functions
-require '../../../../core/functions.php';
+require '../../core/functions.php';
 // require 'functions.php';
 // use needed classes
-require '../../../../models/settings/users/food/Food.php';
+require '../../models/food/Food.php';
 // get payload
 
 // check database connection
@@ -13,7 +13,7 @@ require '../../../../models/settings/users/food/Food.php';
 $conn = null;
 $conn = checkDbConnection();
 // make instance of classes
-$other = new Food($conn);
+$food = new Food($conn);
 // get payload
 $body = file_get_contents("php://input");
 $data = json_decode($body, true);

@@ -5,6 +5,7 @@ class Category
 {
     public $category_aid;
     public $category_is_active;
+    public $category_image;
     public $category_title;
     public $category_datetime;
     public $category_created;
@@ -76,42 +77,40 @@ class Category
 
 
       public function create()
-  {
-    try {
-      $sql = "insert into {$this->tblCategory} ";
-      $sql .= "(category_is_active, ";
-      $sql .= "category_title, ";
-      $sql .= "category_created, ";
-      $sql .= "category_datetime ) values ( ";
-      $sql .= ":category_is_active, ";
-      $sql .= ":category_title, ";
-      $sql .= ":category_email, ";
-      $sql .= ":category_role_id, ";
-      $sql .= ":category_created, ";
-      $sql .= ":category_datetime ) ";
-      $query = $this->connection->prepare($sql);
-      $query->execute([
-        "category_is_active" => $this->category_is_active,
-        "category_title" => $this->category_title,
-        "category_datetime" => $this->category_datetime,
-        "category_created" => $this->category_created,
-
-
-      ]);
-      $this->lastInsertedId = $this->connection->lastInsertId();
-    } catch (PDOException $ex) {
-      $query = false;
-    }
-    return $query;
-  }
+      {
+        try {
+          $sql = "insert into {$this->tblCategory} ";
+          $sql .= "(category_is_active, ";
+          $sql .= "category_image, ";
+          $sql .= "category_title, ";
+          $sql .= "category_created, ";
+          $sql .= "category_datetime ) values ( ";
+          $sql .= ":category_is_active, ";
+          $sql .= ":category_image, ";
+          $sql .= ":category_title, ";
+          $sql .= ":category_created, ";
+          $sql .= ":category_datetime ) ";
+          $query = $this->connection->prepare($sql);
+          $query->execute([
+            "category_is_active" => $this->category_is_active,
+            "category_image" => $this->category_image,
+            "category_title" => $this->category_title,
+            "category_datetime" => $this->category_datetime,
+            "category_created" => $this->category_created,
+    
+    
+          ]);
+          $this->lastInsertedId = $this->connection->lastInsertId();
+        } catch (PDOException $ex) {
+          $query = false;
+        }
+        return $query;
+      }
 
 
   public function checkName()
   {
     try {
-      $sql = "select category_name from {$this->tblCategory} ";
-      $sql = "select category_name from {$this->tblCategory} ";
-      $sql = "select category_name from {$this->tblCategory} ";
       $sql = "select category_name from {$this->tblCategory} ";
       $sql .= "where category_name = :category_name ";
       $query = $this->connection->prepare($sql);
@@ -129,16 +128,14 @@ class Category
   {
     try {
       $sql = "update {$this->tblCategory} set ";
-      $sql .= "category_name = :category_name, ";
-      $sql .= "category_email = :category_email, ";
-      $sql .= "category_role_id = :category_role_id, ";
+      $sql .= "category_image = :category_image, ";
+      $sql .= "category_title = :category_title, ";
       $sql .= "category_datetime = :category_datetime ";
       $sql .= "where category_aid  = :category_aid ";
       $query = $this->connection->prepare($sql);
       $query->execute([
-        "category_name" => $this->category_name,
-        "category_email" => $this->category_email,
-        "category_role_id" => $this->category_role_id,
+        "category_image" => $this->category_image,
+        "category_title" => $this->category_title,
         "category_datetime" => $this->category_datetime,
         "category_aid" => $this->category_aid
       ]);

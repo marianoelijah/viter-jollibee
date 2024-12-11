@@ -5,7 +5,7 @@ require '../../../../core/header.php';
 require '../../../../core/functions.php';
 // require 'functions.php';
 // use needed classes
-require '../../../../models/settings/users/category/Category.php';
+require '../../../../models/category/Category.php';
 // get payload
 
 // check database connection
@@ -13,7 +13,7 @@ require '../../../../models/settings/users/category/Category.php';
 $conn = null;
 $conn = checkDbConnection();
 // make instance of classes
-$other = new Category($conn);
+$category = new Category($conn);
 // get payload
 $body = file_get_contents("php://input");
 $data = json_decode($body, true);

@@ -14,6 +14,7 @@ RewriteRule ^category/active/([0-9]+)$ controllers/category/active.php?categoryi
 RewriteRule ^category/page/([0-9]+)$ controllers/category/page.php?start=$1 [L]
 RewriteRule ^category/search$ controllers/category/search.php [L]
 
+
 RewriteRule ^food$ controllers/food/food.php [L]
 RewriteRule ^food/([0-9]+)$ controllers/food/food.php?foodid=$1 [L]
 RewriteRule ^food/active/([0-9]+)$ controllers/food/active.php?foodid=$1 [L]

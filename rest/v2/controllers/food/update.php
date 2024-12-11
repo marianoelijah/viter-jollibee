@@ -13,8 +13,9 @@ if (array_key_exists("foodid", $_GET)) {
   // get data
   $food->food_aid = $_GET['foodid'];
   $food->food_name = checkIndex($data, "food_name");
-  $food->food_email = checkIndex($data, "food_email");
-  $food->food_role_id = checkIndex($data, "food_role_id");
+  $food->food_price = checkIndex($data, "food_price");
+  $food->food_category_id = checkIndex($data, "food_category_id");
+
   $food->food_created = date("Y-m-d H:i:s");
   $food->food_datetime = date("Y-m-d H:i:s");
   checkId($food->food_aid);
