@@ -3,19 +3,19 @@
 $conn = null;
 $conn = checkDbConnection();
 // make instance of classes
-$other = new Other($conn);
+$category = new Category($conn);
 // get $_GET data
 $error = [];
 $returnData = [];
-if (array_key_exists("otherid", $_GET)) {
+if (array_key_exists("categoryid", $_GET)) {
   // get data
-  $other->other_aid = $_GET['otherid'];
-  checkId($other->other_aid);
+  $category->category_aid = $_GET['categoryid'];
+  checkId($category->category_aid);
   
 
-  $query = checkDelete($other);
+  $query = checkDelete($category);
 
-  returnSuccess($other, "other", $query);
+  returnSuccess($category, "category", $query);
 }
 
 // return 404 error if endpoint not available

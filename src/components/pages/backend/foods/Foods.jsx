@@ -6,10 +6,9 @@ import Footer from "../partials/Footer";
 import Header from "../partials/Header";
 import SearchBar from "../partials/SearchBar";
 import SideNavigation from "../partials/SideNavigation";
-
+import ModalAddFood from "./ModalAddFood";
+import FoodTable from "./FoodTable";
 import ModalError from "../partials/modals/ModalError";
-import ModalAddFoods from "./ModalAddFoods";
-import FoodsTable from "./FoodsTable";
 import ToastSuccess from "../partials/ToastSuccess";
 
 const Foods = () => {
@@ -24,7 +23,7 @@ const Foods = () => {
     <>
       <section className="layout-main">
         <div className="layout-division">
-          <SideNavigation menu="foods"  submenu="users"/>
+          <SideNavigation menu="foods" submenu="read" />
           <main>
             <Header title="Foods" subtitle="Manage Kiosk Foods" />
             <div className="p-8">
@@ -36,7 +35,7 @@ const Foods = () => {
                   Add New
                 </button>
               </div>
-              <FoodsTable setIsAdd={setIsAdd} setItemEdit={setItemEdit} />
+              <FoodTable setItemEdit={setItemEdit} />
             </div>
             <Footer />
           </main>
@@ -46,7 +45,7 @@ const Foods = () => {
       {store.validate && <ModalValidation />}
       {store.error && <ModalError />}
       {store.success && <ToastSuccess />}
-      {store.isAdd && <ModalAddFoods itemEdit={itemEdit} />}
+      {store.isAdd && <ModalAddFood itemEdit={itemEdit}/>}
     </>
   );
 };

@@ -1,6 +1,5 @@
 import { queryData } from "@/components/helpers/queryData";
-import { setIsDelete } from "@/store/storeAction";
-import { StoreContext } from "@/store/storeContext";
+
 import {
   useMutation,
   useMutationState,
@@ -11,6 +10,7 @@ import { FaDeleteLeft } from "react-icons/fa6";
 import { GrFormClose } from "react-icons/gr";
 import ButtonSpinner from "../spinner/ButtonSpinner";
 import { MdDelete } from "react-icons/md";
+import { StoreContext } from "@/components/store/storeContext";
 
 const ModalDelete = ({ setIsDelete, mysqlApiDelete, queryKey, item }) => {
   const { store, dispatch } = React.useContext(StoreContext);

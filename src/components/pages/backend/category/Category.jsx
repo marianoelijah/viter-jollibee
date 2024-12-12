@@ -1,28 +1,31 @@
-import { Plus } from 'lucide-react'
-import React from 'react'
-import SideNavigation from '../partials/SideNavigation'
-import Header from '../partials/Header'
-import Footer from '../partials/Footer'
-import SearchBar from '../partials/SearchBar'
-import { StoreContext } from '@/components/store/storeContext'
-import ModalAddCategoryy from './ModalAddCategoryy'
-import ToastSuccess from '../partials/ToastSuccess'
-import ModalError from '../partials/modals/ModalError'
-import ModalValidation from '../partials/modals/ModalValidation'
-import { setIsAdd } from '@/components/store/storeAction'
-import CategoryTable from './CategoryTable'
+import { setIsAdd } from "@/components/store/storeAction";
+import { StoreContext } from "@/components/store/storeContext";
+import { Plus } from "lucide-react";
+import React from "react";
+import Footer from "../partials/Footer";
+import Header from "../partials/Header";
+import ModalError from "../partials/modals/ModalError";
+import ModalValidation from "../partials/modals/ModalValidation";
+import SearchBar from "../partials/SearchBar";
+import SideNavigation from "../partials/SideNavigation";
+import ToastSuccess from "../partials/ToastSuccess";
+import CategoryTable from "./CategoryTable";
+import ModalAddCategory from "./ModalAddCategory";
+
 
 const Category = () => {
   const { dispatch, store } = React.useContext(StoreContext);
+
   const [isCategoryEdit, setIsCategoryEdit] = React.useState(null);
 
   const handleAdd = () => {
     dispatch(setIsAdd(true));
     setIsCategoryEdit(null);
   };
+
   return (
     <>
-        <section className="layout-main">
+      <section className="layout-main">
         <div className="layout-division">
           <SideNavigation menu="category" submenu="read" />
           <main>
@@ -52,13 +55,13 @@ const Category = () => {
       {/* <SpinnerWindow /> */}
 
       {store.isAdd && (
-        <ModalAddCategoryy
+        <ModalAddCategory
           isCategoryEdit={isCategoryEdit}
           setIsCategoryEdit={setIsCategoryEdit}
         />
       )}
     </>
-  )
-}
+  );
+};
 
-export default Category
+export default Category;

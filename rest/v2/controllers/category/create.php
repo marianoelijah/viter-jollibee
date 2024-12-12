@@ -16,8 +16,7 @@ $category->category_created = date("Y-m-d H:i:s");
 $category->category_datetime = date("Y-m-d H:i:s");
 
 //checks newly added data if it already exists
-// isNameExist($category, $category->category_email);
-
+// isNameExist($category, $category->category_name);
 
 $query = checkCreate($category);
 

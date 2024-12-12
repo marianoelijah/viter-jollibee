@@ -1,16 +1,13 @@
-import { Archive, Trash2, X } from "lucide-react";
-import React from "react";
-import ModalWrapper from "./ModalWrapper";
-import { setIsConfirm } from "@/components/store/storeAction";
+import { queryData } from "@/components/helpers/queryData";
 import { StoreContext } from "@/components/store/storeContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import ButtonSpinner from "@/components/partials/spinner/ButtonSpinner";
+import React from "react";
+import { FaArchive } from "react-icons/fa";
 
-const ModalConfirm = () => {
-  const { dispatch } = React.useContext(StoreContext);
-
+const ModalConfirm = ({ setIsArchive, mysqlEndpoint, queryKey, item }) => {
+  const { store, dispatch } = React.useContext(StoreContext);
   const handleClose = () => {
-    dispatch(setIsConfirm(false));
+    dispatch(setIsArchive(false));
   };
 
   const queryClient = useQueryClient();
@@ -37,39 +34,39 @@ const ModalConfirm = () => {
       isActive: 0,
     });
   };
-
   return (
-    <>
-      <ModalWrapper>
-        <div className="modal-main bg-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full rounded-md border border-line">
-          <div className="modeal-header flex gap-2 p-2 items-center border-b border-line mb-2">
-            <Archive size={16} stroke={"yellow"} />{" "}
-            <span className="text-warning">
+    <div className=" fixed top-0 left-0 h-screen w-full flex justify-center items-center z-[999]">
+      <div
+        className=" backdrop bg-black/80 h-full w-full absolute top-0 left-0 z-[-1] "
+        onClick={handleClose}
+      ></div>
+      <div className="max-w-[450px] w-full bg-white rounded-md">
+        <div className="flex items-center justify-between p-4  ">
+          <div></div>
+          <h2 className="translate-y-2">
+            <FaArchive size={30} className="" />
+          </h2>
+          <button onClick={handleClose}></button>
+        </div>
+        <div className="p-4 text-center">
+          <h3 className="text-sm">Are you sure you want to archive {item}?</h3>
+          <div className="flex justify-center mt-5 gap-2">
+            <button
+              className="inline-block rounded-md w-full px-5 py-2 bg-[#9f1659] text-white"
+              onClick={handleYes}
+            >
               Confirm
-            </span>
-            <button className="ml-auto" 
-            onClick={handleClose}>
-              <X />
+            </button>
+            <button
+              className="inline-block rounded-md w-full px-5 py-2 bg-gray-200 text-gray-800"
+              onClick={handleClose}
+            >
+              Cancel
             </button>
           </div>
-          <div className="modal-body p-2 py-4">
-            <p className="mb-0 text-center">
-              Are you sure you want to archive this category?
-            </p>
-            <div className="flex justify-end gap-3 mt-5">
-              <button className="btn btn-warning"
-              onClick={handleYes}>
-                {mutation.isPending ? <ButtonSpinner /> : "Yes"}
-              </button>
-              <button className="btn btn-cancel"
-               onClick={handleClose}>
-                Cancel
-              </button>
-            </div>
-          </div>
         </div>
-      </ModalWrapper>
-    </>
+      </div>
+    </div>
   );
 };
 

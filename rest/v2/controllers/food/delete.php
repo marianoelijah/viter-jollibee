@@ -15,7 +15,7 @@ if (array_key_exists("foodid", $_GET)) {
 
   $query = checkDelete($food);
 
-  returnSuccess($food, "food", $query);
+  returnSuccess($food, "Departments", $query);
 }
 
 // return 404 error if endpoint not available

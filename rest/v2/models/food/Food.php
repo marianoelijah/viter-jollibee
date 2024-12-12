@@ -1,6 +1,5 @@
 <?php
 
-
 class Food
 {
     public $food_aid;
@@ -18,14 +17,13 @@ class Food
     public $category_datetime;
     public $category_created;
 
+
     public $connection;
     public $lastInsertedId;
     public $food_start;
     public $food_total;
-    public $food_search;
     public $category_start;
     public $category_total;
-    public $category_search;
 
 
     public $tblCategory;
@@ -41,23 +39,22 @@ class Food
     }
 
 
-    public function readAll()
-    {
-      try {
-        $sql = "select * ";
-        $sql .= "from ";
-        $sql .= "{$this->tblFood} as food, ";
-        $sql .= "{$this->tblCategory} as category ";
-        $sql .= "where category.category_aid = food.food_category_id ";
-        $sql .= "order by food.food_is_active desc, ";
-        $sql .= "food.food_aid asc ";
-        $query = $this->connection->query($sql);
-      } catch (PDOException $ex) {
-        $query = false;
+       public function readAll()
+      {
+        try {
+          $sql = "select * ";
+          $sql .= "from ";
+          $sql .= "{$this->tblCategory} as readCategory, ";
+          $sql .= "{$this->tblFood} as readFood ";
+          $sql .= "where readCategory.category_aid = readFood.food_category_id ";
+          $sql .= "order by readFood.food_is_active desc, ";
+          $sql .= "readFood.food_aid asc ";
+          $query = $this->connection->query($sql);
+        } catch (PDOException $ex) {
+          $query = false;
+        }
+        return $query;
       }
-      return $query;
-    }
-
 
 
       public function readLimit()
@@ -65,11 +62,11 @@ class Food
         try {
           $sql = "select * ";
           $sql .= "from ";
-          $sql .= "{$this->tblFood} as food, ";
-          $sql .= "{$this->tblCategory} as category ";
-          $sql .= "where category.category_aid = food.food_category_id ";
-          $sql .= "order by food.food_is_active desc, ";
-          $sql .= "food.food_aid asc ";
+          $sql .= "{$this->tblCategory} as readCategory, ";
+          $sql .= "{$this->tblFood} as readFood ";
+          $sql .= "where readCategory.category_aid = readFood.food_category_id ";
+          $sql .= "order by readFood.food_is_active desc, ";
+          $sql .= "readFood.food_aid asc ";
           $sql .= "limit :start, ";
           $sql .= ":total ";
           $query = $this->connection->prepare($sql);
@@ -98,17 +95,19 @@ class Food
       }
 
 
-      public function create()
+    public function create()
   {
     try {
       $sql = "insert into {$this->tblFood} ";
       $sql .= "(food_is_active, ";
+      $sql .= "food_image, ";
       $sql .= "food_title, ";
       $sql .= "food_price, ";
       $sql .= "food_category_id, ";
       $sql .= "food_created, ";
       $sql .= "food_datetime ) values ( ";
       $sql .= ":food_is_active, ";
+      $sql .= ":food_image, ";
       $sql .= ":food_title, ";
       $sql .= ":food_price, ";
       $sql .= ":food_category_id, ";
@@ -117,6 +116,7 @@ class Food
       $query = $this->connection->prepare($sql);
       $query->execute([
         "food_is_active" => $this->food_is_active,
+        "food_image" => $this->food_image,
         "food_title" => $this->food_title,
         "food_price" => $this->food_price,
         "food_category_id" => $this->food_category_id,
@@ -136,11 +136,11 @@ class Food
   public function checkName()
   {
     try {
-      $sql = "select food_name from {$this->tblFood} ";
-      $sql .= "where food_name = :food_name ";
+      $sql = "select food_title from {$this->tblFood} ";
+      $sql .= "where food_title = :food_title ";
       $query = $this->connection->prepare($sql);
       $query->execute([
-        "food_name" => "{$this->food_name}",
+        "food_title" => "{$this->food_title}",
       ]);
     } catch (PDOException $ex) {
       $query = false;
@@ -153,6 +153,7 @@ class Food
   {
     try {
       $sql = "update {$this->tblFood} set ";
+      $sql .= "food_image = :food_image, ";
       $sql .= "food_title = :food_title, ";
       $sql .= "food_price = :food_price, ";
       $sql .= "food_category_id = :food_category_id, ";
@@ -160,6 +161,7 @@ class Food
       $sql .= "where food_aid  = :food_aid ";
       $query = $this->connection->prepare($sql);
       $query->execute([
+        "food_image" => $this->food_image,
         "food_title" => $this->food_title,
         "food_price" => $this->food_price,
         "food_category_id" => $this->food_category_id,
@@ -210,55 +212,4 @@ class Food
 
 
 
-
-  public function search()
-    {
-        try {
-            $sql = "select * ";
-            $sql .= "from {$this->tblfood} ";
-            $sql .= "where food_name like :food_name ";
-            $sql .= "order by food_is_active desc, ";
-            $sql .= "food_aid asc ";
-            $query = $this->connection->prepare($sql);
-            $query->execute([
-                "food_name" => "%{$this->food_search}%",
-            ]);
-        } catch (PDOException $ex) {
-            $query = false;
-        }
-        return $query;
-    }
-    public function filterByStatusAndSearch()
-    {
-        try {
-            $sql = "select ";
-            $sql .= "* ";
-            $sql .= "from {$this->tblfood} ";
-            $sql .= "where food_is_active = :food_is_active ";
-            $sql .= "and (food_name like :food_name ";
-            $sql .= ") ";
-            $sql .= "order by food_is_active desc, ";
-            $sql .= "food_name asc ";
-            $query = $this->connection->prepare($sql);
-            $query->execute([
-                "food_name" => "%{$this->food_search}%",
-                "food_is_active" => $this->food_is_active,
-            ]);
-        } catch (PDOException $ex) {
-            $query = false;
-        }
-        return $query;
-    }
-
-
-
-
-    
 }
-
-
-
-
-
-
-

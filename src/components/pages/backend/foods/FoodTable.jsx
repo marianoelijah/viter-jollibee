@@ -1,3 +1,6 @@
+import useQueryData from "@/components/custom-hook/useQueryData";
+import ModalDelete from "@/components/partials/modal/ModalDelete";
+import ModalRestore from "@/components/partials/modal/ModalRestore";
 import Status from "@/components/partials/Status";
 import {
   setIsAdd,
@@ -9,36 +12,30 @@ import { StoreContext } from "@/components/store/storeContext";
 import { Archive, ArchiveRestore, FilePenLine, Trash2 } from "lucide-react";
 import React from "react";
 import LoadMore from "../partials/LoadMore";
+import ModalConfirm from "../partials/modals/ModalConfirm";
 
-import useQueryData from "@/components/custom-hook/useQueryData";
-import ModalRestore from "@/components/partials/modal/ModalRestore";
-import ModalDelete from "@/components/partials/modal/ModalDelete";
-import ModalArchive from "@/components/partials/modal/ModalArchive";
-
-const CategoryTable = ({ setIsCategoryEdit }) => {
+const FoodTable = ({ setItemEdit }) => {
   const [id, setIsId] = React.useState("");
   const { store, dispatch } = React.useContext(StoreContext);
 
-  let counter = 1;
-
   const handleEdit = (item) => {
     dispatch(setIsAdd(true));
-    setIsCategoryEdit(item);
+    setItemEdit(item);
   };
 
   const handleDelete = (item) => {
     dispatch(setIsDelete(true));
-    setIsId(item.category_aid);
-  };
-
-  const handleRestore = (item) => {
-    dispatch(setIsRestore(true));
-    setIsId(item.category_aid);
+    setIsId(item.food_aid);
   };
 
   const handleArchive = (item) => {
     dispatch(setIsArchive(true));
-    setIsId(item.category_aid);
+    setIsId(item.food_aid);
+  };
+
+  const handleRestore = (item) => {
+    dispatch(setIsRestore(true));
+    setIsId(item.food_aid);
   };
 
   const {
@@ -47,11 +44,12 @@ const CategoryTable = ({ setIsCategoryEdit }) => {
     data: result,
     status,
   } = useQueryData(
-    `/v2/category`, // endpoint
+    `/v2/food`, // endpoint
     "get", // method
-    "category" // key
+    "food" // key
   );
-  
+
+  let counter = 1;
 
   return (
     <>
@@ -62,57 +60,53 @@ const CategoryTable = ({ setIsCategoryEdit }) => {
           <table>
             <thead>
               <tr>
-              <th>#</th>
+                <th>#</th>
                 <th>Status</th>
                 <th>Title</th>
-                {/* <th>Image Name</th> */}
+                <th>Price</th>
+                <th>Category</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {/* <tr>
-                <td colSpan={100}>
-                  <IconNoData />
-                </td>
-              </tr>
-              <tr>
-                <td colSpan={100}>
-                  <IconServerError />
-                </td>
-              </tr> */}
-
               {result?.count > 0 &&
                 result.data.map((item, key) => (
                   <tr key={key}>
                     <td>{counter++}.</td>
                     <td>
-                      {item.category_is_active === 1 ? (
+                      {item.food_is_active === 1 ? (
                         <Status text="Active" />
                       ) : (
-                        <Status text="inActive" />
+                        <Status text="Inactive" />
                       )}
                     </td>
-                    <td>{item.category_title}</td>
-                    {/* <td>{item.category_image}</td> */}
+                    <td title={`${item.food_title}`}>{item.food_title}</td>
+                    <td title={`${item.food_price}`}>{item.food_price}</td>
+                    <td title={`${item.food_category_id}`}>
+                      {item.category_title}
+                    </td>
                     <td>
                       <ul className="table-action">
-                        {item.category_is_active === 1 ? (
+                        {item.food_is_active === 1 ? (
                           <>
                             <li>
-                              <button className="tooltip" 
-                              data-tooltip="Edit"
-                              onClick={() => handleEdit(item)}
+                              <button
+                                type="button"
+                                className="tooltip"
+                                data-tooltip="Edit"
+                                onClick={() => handleEdit(item)}
                               >
                                 <FilePenLine />
                               </button>
                             </li>
                             <li>
                               <button
+                                type="button"
                                 className="tooltip"
                                 data-tooltip="Archive"
                                 onClick={() => handleArchive(item)}
                               >
-                                <Archive  />
+                                <Archive />
                               </button>
                             </li>
                           </>
@@ -120,21 +114,22 @@ const CategoryTable = ({ setIsCategoryEdit }) => {
                           <>
                             <li>
                               <button
+                                type="button"
                                 className="tooltip"
                                 data-tooltip="Restore"
+                                onClick={() => handleRestore(item)}
                               >
-                                <ArchiveRestore
-                                  onClick={() => handleRestore(item)}
-                                />
+                                <ArchiveRestore />
                               </button>
                             </li>
                             <li>
                               <button
+                                type="button"
                                 className="tool-tip"
                                 data-tooltip="Delete"
                                 onClick={() => handleDelete(item)}
                               >
-                                <Trash2  />
+                                <Trash2 />
                               </button>
                             </li>
                           </>
@@ -148,31 +143,30 @@ const CategoryTable = ({ setIsCategoryEdit }) => {
 
           <LoadMore />
         </div>
+        {store.isDelete && (
+          <ModalDelete
+            setIsDelete={setIsDelete}
+            mysqlApiDelete={`/v2/food/${id}`}
+            queryKey={"food"}
+          />
+        )}
+        {store.isArchive && (
+          <ModalConfirm
+            setIsArchive={setIsArchive}
+            mysqlEndpoint={`/v2/food/active/${id}`}
+            queryKey={"food"}
+          />
+        )}
+        {store.isRestore && (
+          <ModalRestore
+            setIsRestore={setIsRestore}
+            mysqlEndpoint={`/v2/food/active/${id}`}
+            queryKey={"food"}
+          />
+        )}
       </div>
-
-      {store.isDelete && (
-        <ModalDelete
-          setIsDelete={setIsDelete}
-          mysqlApiDelete={`/v2/category/${id}`}
-          queryKey={"category"}
-        />
-      )}
-      {store.isArchive && (
-        <ModalArchive
-          setIsArchive={setIsArchive}
-          mysqlEndpoint={`/v2/category/active/${id}`}
-          queryKey={"category"}
-        />
-      )}
-      {store.isRestore && (
-        <ModalRestore
-          setIsRestore={setIsRestore}
-          mysqlEndpoint={`/v2/category/active/${id}`}
-          queryKey={"category"}
-        />
-      )}
     </>
   );
 };
 
-export default CategoryTable;
+export default FoodTable;

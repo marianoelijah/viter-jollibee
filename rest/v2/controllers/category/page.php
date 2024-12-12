@@ -6,7 +6,7 @@ require '../../core/functions.php';
 // require 'functions.php';
 // use needed classes
 require '../../models/category/Category.php';
-// get payload
+
 
 // check database connection
 $conn = null;
