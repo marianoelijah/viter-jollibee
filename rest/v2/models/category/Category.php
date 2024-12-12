@@ -77,36 +77,35 @@ class Category
 
 
       public function create()
-  {
-    try {
-      $sql = "insert into {$this->tblCategory} ";
-      $sql .= "(category_is_active, ";
-      $sql .= "category_image, ";
-      $sql .= "category_title, ";
-      $sql .= "category_created, ";
-      $sql .= "category_datetime ) values ( ";
-      $sql .= ":category_is_active, ";
-      $sql .= ":category_image, ";
-      $sql .= ":category_title, ";
-      $sql .= ":category_created, ";
-      $sql .= ":category_datetime ) ";
-      $query = $this->connection->prepare($sql);
-      $query->execute([
-        "category_is_active" => $this->category_is_active,
-        "category_image" => $this->category_image,
-        "category_title" => $this->category_title,
-        "category_datetime" => $this->category_datetime,
-        "category_created" => $this->category_created,
-
-
-      ]);
-      $this->lastInsertedId = $this->connection->lastInsertId();
-    } catch (PDOException $ex) {
-      $query = false;
-    }
-    return $query;
-  }
-
+      {
+        try {
+          $sql = "insert into {$this->tblCategory} ";
+          $sql .= "(category_is_active, ";
+          $sql .= "category_image, ";
+          $sql .= "category_title, ";
+          $sql .= "category_created, ";
+          $sql .= "category_datetime ) values ( ";
+          $sql .= ":category_is_active, ";
+          $sql .= ":category_image, ";
+          $sql .= ":category_title, ";
+          $sql .= ":category_created, ";
+          $sql .= ":category_datetime ) ";
+          $query = $this->connection->prepare($sql);
+          $query->execute([
+            "category_is_active" => $this->category_is_active,
+            "category_image" => $this->category_image,
+            "category_title" => $this->category_title,
+            "category_datetime" => $this->category_datetime,
+            "category_created" => $this->category_created,
+    
+    
+          ]);
+          $this->lastInsertedId = $this->connection->lastInsertId();
+        } catch (PDOException $ex) {
+          $query = false;
+        }
+        return $query;
+      }
 
   public function checkName()
   {

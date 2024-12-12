@@ -50,7 +50,7 @@ const Category = () => {
       </section>
 
       {store.validate && <ModalValidation />}
-      {store.error && <ModalError />}
+      {/* {store.error && <ModalError />} */}
       {store.success && <ToastSuccess />}
       {/* <SpinnerWindow /> */}
 

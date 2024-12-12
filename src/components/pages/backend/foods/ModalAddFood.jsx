@@ -132,7 +132,7 @@ const ModalAddFood = ({ itemEdit }) => {
                         ) : (
                           <img
                             src={
-                              itemEdit === null
+                              photo
                                 ? URL.createObjectURL(photo) // preview
                                 : imgPath + "/" + itemEdit?.food_image // check db
                             }
