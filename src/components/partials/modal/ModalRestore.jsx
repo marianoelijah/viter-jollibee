@@ -4,7 +4,12 @@ import React from "react";
 import { FaTrashRestore } from "react-icons/fa";
 import { GrFormClose } from "react-icons/gr";
 import ButtonSpinner from "../spinner/ButtonSpinner";
-import { setIsRestore } from "@/components/store/storeAction";
+import {
+  setError,
+  setIsRestore,
+  setMessage,
+  setSuccess,
+} from "@/components/store/storeAction";
 import { StoreContext } from "@/components/store/storeContext";
 
 const ModalRestore = ({ setIsArchive, mysqlEndpoint, queryKey, item }) => {
@@ -23,10 +28,14 @@ const ModalRestore = ({ setIsArchive, mysqlEndpoint, queryKey, item }) => {
       // dispatch(setIsDelete(false));
 
       if (!data.success) {
-        console.log("May error!");
+        dispatch(setError(true));
+        dispatch(setMessage(data.error));
+        dispatch(setSuccess(true));
+        // console.log("May error!");
       } else {
         dispatch(setIsRestore(false));
-        console.log("Naysuu!");
+        dispatch(setSuccess(true));
+        // console.log("Naysuu!");
       }
     },
   });

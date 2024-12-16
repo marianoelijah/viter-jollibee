@@ -15,8 +15,14 @@ RewriteRule ^category/page/([0-9]+)$ controllers/category/page.php?start=$1 [L]
 RewriteRule ^category/search$ controllers/category/search.php [L]
 
 
+RewriteRule ^role$ controllers/settings/users/role/role.php [L]
+RewriteRule ^role/([0-9]+)$ controllers/settings/users/role/role.php?roleid=$1 [L]
+RewriteRule ^role/active/([0-9]+)$ controllers/settings/users/role/active.php?roleid=$1 [L]
+
+
 RewriteRule ^food$ controllers/food/food.php [L]
 RewriteRule ^food/([0-9]+)$ controllers/food/food.php?foodid=$1 [L]
 RewriteRule ^food/active/([0-9]+)$ controllers/food/active.php?foodid=$1 [L]
 RewriteRule ^food/page/([0-9]+)$ controllers/food/page.php?start=$1 [L]
 RewriteRule ^food/search$ controllers/food/search.php [L]
+RewriteRule ^food/read-food-by-category$ controllers/food/read-food-by-category.php [L]

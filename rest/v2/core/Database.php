@@ -11,7 +11,7 @@ class Database
 
         // Localhost
         $host = "localhost";
-        $dbname = "jolibee_v1";
+        $dbname = "jollibee_v2";
         $username = "root";
         $password = "";
 

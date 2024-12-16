@@ -12,30 +12,42 @@ import SetPassword from "./components/pages/backend/access/SetPassword";
 import ForgotPassword from "./components/pages/backend/access/ForgotPassword";
 import Login from "./components/pages/backend/access/Login";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Settings from "./components/pages/backend/settings/Settings";
+import SettingsList from "./components/pages/backend/settings/SettingsList";
+import Role from "./components/pages/backend/settings/role/Role";
 
 const App = () => {
   const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
-    <StoreProvider >
-      <Router>
-       <Routes>
-       <Route index element={<Welcome />} />
-       <Route path="/order" element={<Order />} />
-       <Route path="/admin/dashboard" element={<Dashboard />} />
-       <Route path="/admin/advertisement" element={<Advertisement />} />
-       <Route path="/admin/foods" element={<Foods />} />
-       <Route path="/admin/category" element={<Category />} />
-       
+      <StoreProvider>
+        <Router>
+          <Routes>
+            
+            <Route index element={<Welcome />} />
+            <Route path="/order" element={<Order />} />
+            
+            
 
-       <Route path="/admin/login" element={<Login />} />
-       <Route path="/admin/set-password" element={<SetPassword />} />
-       <Route path="/admin/forgot-password" element={<ForgotPassword />} />
-       </Routes>
-      </Router>
-    </StoreProvider>
+
+            {/* <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path="/admin/settings" element={<Settings />} />
+            <Route path="/admin/settingslist" element={<SettingsList />} />
+            <Route path="/admin/settings/role" element={<Role />} />
+            <Route path="/admin/settings/developer" element={<Settings />} />
+            <Route path="/admin/settings/admin" element={<Settings />} />
+            <Route path="/admin/advertisement" element={<Advertisement />} />
+            <Route path="/admin/foods" element={<Foods />} />
+            <Route path="/admin/category" element={<Category />} /> */}
+
+            <Route path="/admin/login" element={<Login />} />
+            <Route path="/admin/set-password" element={<SetPassword />} />
+            <Route path="/admin/forgot-password" element={<ForgotPassword />} />
+
+          </Routes>
+        </Router>
+      </StoreProvider>
     </QueryClientProvider>
-  
   );
 };
 

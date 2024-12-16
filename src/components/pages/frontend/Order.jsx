@@ -5,29 +5,64 @@ import SideNav from "./SideNav";
 import MenuList from "./MenuList";
 import ModalCart from "./ModalCart";
 import ToastSuccess from "./ToastSuccess";
+import useQueryData from "@/components/custom-hook/useQueryData";
 
 const Order = () => {
-  const [category, setCategory] = React.useState("Value Meal");
+  const [categoryId, setCategoryId] = React.useState("");
   const [cartData, setCartData] = React.useState([]);
   const [showCart, setShowCart] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
 
+  const {
+    isLoading,
+    isFetching,
+    error,
+    data: result,
+    status,
+  } = useQueryData(
+    `/v2/category`, // endpoint
+    "get", // method
+    "category" // key
+  );
+
+  const getCategoryName = (categoryId, categoryResult) => {
+    let categorySelectedName = "";
+
+    categoryResult?.data.map((item) => {
+      if (Number(categoryId) === Number(item.category_aid)) {
+        categorySelectedName = item.category_title;
+      }
+    });
+
+    return categorySelectedName;
+  };
+
+  const categoryName =
+    categoryId === "" ? "Value Meal" : getCategoryName(categoryId, result);
+
   const getTotal = cartData.reduce((acc, item) => {
-    return acc + item.menu_price * item.quantity;
+    return acc + item.food_price * item.quantity;
   }, 0);
+
+
 
   return (
     <>
       <SliderBanner />
       <div className="grid grid-rows-[auto,_1fr,_auto] min-h-[calc(100vh-200px)]">
-        <MenuTitle category={category} />
+        <MenuTitle categoryId={categoryId} />
         <section className="grid grid-cols-[150px,_1fr] bg-myred px-3">
           <aside className="m-1 bg-white rounded-md h-[60.5vh] overflow-y-scroll custom-scroll">
-            <SideNav setCategory={setCategory} />
+            <SideNav
+              setCategoryId={setCategoryId}
+              isFetching={isFetching}
+              isLoading={isLoading}
+              result={result}
+            />
           </aside>
           <main className="m-1 bg-white rounded-md h-[60.5vh] overflow-y-scroll custom-scroll ">
             <MenuList
-              category={category}
+              categoryId={categoryId}
               cartData={cartData}
               setCartData={setCartData}
               setIsSuccess={setIsSuccess}

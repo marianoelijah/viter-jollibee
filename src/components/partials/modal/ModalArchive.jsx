@@ -1,4 +1,9 @@
 import { queryData } from "@/components/helpers/queryData";
+import {
+  setError,
+  setMessage,
+  setSuccess,
+} from "@/components/store/storeAction";
 import { StoreContext } from "@/components/store/storeContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
@@ -20,10 +25,15 @@ const ModalArchive = ({ setIsArchive, mysqlEndpoint, queryKey, item }) => {
       // dispatch(setIsDelete(false));
 
       if (!data.success) {
-        console.log("May error!");
+        dispatch(setError(true));
+        dispatch(setMessage(data.error));
+        dispatch(setSuccess(true));
+        // console.log("May error!");
       } else {
         dispatch(setIsArchive(false));
-        console.log("Naysuu!");
+        dispatch(setSuccess(true));
+        dispatch(setMessage("Successful!"));
+        // console.log("Naysuu!");
       }
     },
   });

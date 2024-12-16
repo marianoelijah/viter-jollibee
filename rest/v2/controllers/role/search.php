@@ -5,13 +5,13 @@ require '../../core/header.php';
 require '../../core/functions.php';
 // require 'functions.php';
 // use needed classes
-require '../../models/client/client.php';
+require '../../models/role/role.php';
 
 // check database connection
 $conn = null;
 $conn = checkDbConnection();
 // make instance of classes
-$client = new Client($conn);
+$role = new Role($conn);
 $response = new Response();
 // get payload
 $body = file_get_contents("php://input");
@@ -23,8 +23,8 @@ if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
         // check data
         checkPayload($data);
         // get task id from query string
-        $client->client_search = $data["search"];
-        $query = checkSearch($client);
+        $role->role_search = $data["search"];
+        $query = checkSearch($role);
         http_response_code(200);
         getQueriedData($query);
     }
