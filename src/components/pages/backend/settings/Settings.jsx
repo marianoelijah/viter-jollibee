@@ -1,9 +1,8 @@
+import React from "react";
 import Footer from "../partials/Footer";
 import Header from "../partials/Header";
 import SideNavigation from "../partials/SideNavigation";
-
-import { menus } from "../menu-data";
-import SettingsList from "./SettingsList";
+import SettingList from "./SettingList";
 
 const Settings = () => {
   return (
@@ -12,9 +11,9 @@ const Settings = () => {
         <div className="layout-division">
           <SideNavigation menu="settings" />
           <main>
-            <Header title="Settings" subtle="Welcome to Jollibee" />
+            <Header title="Settings" subtitle="Welcome to Jollibee!" />
             <div className="p-5">
-              <SettingsList />
+              <SettingList />
             </div>
             <Footer />
           </main>

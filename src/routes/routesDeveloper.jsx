@@ -6,34 +6,33 @@ import Developer from "@/components/pages/backend/settings/developer/Developer";
 import Role from "@/components/pages/backend/settings/role/Role";
 import Settings from "@/components/pages/backend/settings/Settings";
 
-
-export const routeAdmin = [
+export const routesDeveloper = [
   {
-    route: `admin/dashboard`,
+    route: `/developer/dashboard`,
     element: <Dashboard />,
   },
   {
-    route: `admin/advertisement`,
+    route: `/developer/advertisement`,
     element: <Advertisement />,
   },
   {
-    route: `admin/category`,
+    route: `/developer/category`,
     element: <Category />,
   },
   {
-    route: `admin/foods`,
+    route: `/developer/foods`,
     element: <Foods />,
   },
   {
-    route: `admin/settings`,
+    route: `/developer/settings`,
     element: <Settings />,
   },
   {
-    route: `admin/settings/role`,
+    route: `/developer/settings/role`,
     element: <Role />,
   },
   {
-    route: `admin/settings/developer`,
+    route: `/developer/settings/developer`,
     element: <Developer />,
   },
 ];

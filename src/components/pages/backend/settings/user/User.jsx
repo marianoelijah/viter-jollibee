@@ -1,36 +1,45 @@
-import ModalSuccess from "@/components/partials/modal/modalSuccess";
-import { setIsAdd } from "@/components/store/storeAction";
+import useQueryData from "@/components/custom-hook/useQueryData";
+import Loadmore from "@/components/partials/LoadMore";
+import ModalDelete from "@/components/partials/modal/ModalDelete";
+import ModalRestore from "@/components/partials/modal/ModalRestore";
+import FetchingSpinner from "@/components/partials/spinner/FetchingSpinner";
+import TableLoader from "@/components/partials/TableLoader";
+import {
+  setIsAdd,
+  setIsArchive,
+  setIsDelete,
+  setIsRestore,
+} from "@/components/store/storeAction";
 import { StoreContext } from "@/components/store/storeContext";
-import { Plus } from "lucide-react";
+import { Archive, ArchiveRestore, FilePenLine, Trash2 } from "lucide-react";
 import React from "react";
-import Footer from "../../partials/Footer";
-import Header from "../../partials/Header";
-import ModalError from "../../partials/modals/ModalError";
-import SideNavigation from "../../partials/SideNavigation";
-import ModalAddRole from "./ModalAddUser";
-import UserList from "./UserList";
+import IconNoData from "../../partials/IconNoData";
+import IconServerError from "../../partials/IconServerError";
+import ModalArchive from "../../partials/modals/ModalArchive";
+import Pills from "../../partials/Pills";
 
 const User = () => {
-  const { store, dispatch } = React.useContext(StoreContext);
+  const { dispatch, store } = React.useContext(StoreContext);
   const [itemEdit, setItemEdit] = React.useState(null);
 
   const handleAdd = () => {
     dispatch(setIsAdd(true));
     setItemEdit(null);
   };
+
   return (
     <>
       <section className="layout-main">
         <div className="layout-division">
-          <SideNavigation menu="settings" />
+          <SideNavigation menu="role" />
           <main>
-            <Header title="User" subtle="Welcome to Jollibee" />
+            <Header title="Role" subtitle="Welcome to Jollibee!" />
             <div className="p-5">
-              <div className="flex items-end justify-between">
+              <div className="flex justify-between items-end">
                 <div></div>
                 <button
-                  type="button"
                   className="btn btn-add"
+                  type="button"
                   onClick={handleAdd}
                 >
                   <Plus size={16} />
@@ -44,9 +53,10 @@ const User = () => {
         </div>
       </section>
 
-      {store.success && <ModalSuccess />}
-      {store.success && <ModalError />}
-      {store.isAdd && <ModalAddUser itemEdit={itemEdit} />}
+      {store.success && <ToastSuccess />}
+      {store.error && <ModalError />}
+      {/* {store.isAdd && <ModalError />} */}
+      {store.isAdd && <ModalAddRole itemEdit={itemEdit} />}
     </>
   );
 };

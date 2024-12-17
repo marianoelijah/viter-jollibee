@@ -13,8 +13,10 @@ import ForgotPassword from "./components/pages/backend/access/ForgotPassword";
 import Login from "./components/pages/backend/access/Login";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Settings from "./components/pages/backend/settings/Settings";
-import SettingsList from "./components/pages/backend/settings/SettingsList";
+import SettingsList from "./components/pages/backend/settings/SettingList";
 import Role from "./components/pages/backend/settings/role/Role";
+import { routesDeveloper } from "./routes/RoutesDeveloper";
+import { routesAdmin } from "./routes/routesAdmin";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -27,6 +29,17 @@ const App = () => {
             <Route index element={<Welcome />} />
             <Route path="/order" element={<Order />} />
             
+            {routesAdmin.map((item, key) => {
+              return (
+                <Route path={item.route} key={key} element={item.element} />
+              );
+            })}
+
+            {routesDeveloper.map((item, key) => {
+              return (
+                <Route path={item.route} key={key} element={item.element} />
+              );
+            })}
             
 
 

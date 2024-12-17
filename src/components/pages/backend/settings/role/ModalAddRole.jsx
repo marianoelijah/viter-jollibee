@@ -71,7 +71,7 @@ const ModalAddRole = ({ itemEdit }) => {
       <ModalWrapper>
         <div className="modal-side absolute top-0 right-0 bg-primary h-[100dvh] w-[300px] border-l border-line">
           <div className="modal-header p-4 flex justify-between items-center">
-            <h5 className="mb-0">{itemEdit ? "Update" : "Add"}Add role</h5>
+            <h5 className="mb-0">Add role</h5>
             <button onClick={handleClose}>
               <X />
             </button>

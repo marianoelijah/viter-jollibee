@@ -16,7 +16,7 @@ import {
   setSuccess,
 } from "@/components/store/storeAction";
 
-const ModalAddUser = ({ itemEdit }) => {
+const ModalAddRole = ({ itemEdit }) => {
   const { dispatch, store } = React.useContext(StoreContext);
   const [value, setValue] = React.useState("");
   const { uploadPhoto, handleChangePhoto, photo } = useUploadPhoto("");
@@ -71,7 +71,7 @@ const ModalAddUser = ({ itemEdit }) => {
       <ModalWrapper>
         <div className="modal-side absolute top-0 right-0 bg-primary h-[100dvh] w-[300px] border-l border-line">
           <div className="modal-header p-4 flex justify-between items-center">
-            <h5 className="mb-0">{itemEdit ? "Update" : "Add"}Add role</h5>
+            <h5 className="mb-0">{itemEdit ? "Update" : "Add"} User</h5>
             <button onClick={handleClose}>
               <X />
             </button>
@@ -130,4 +130,4 @@ const ModalAddUser = ({ itemEdit }) => {
   );
 };
 
-export default ModalAddUser;
+export default ModalAddRole;

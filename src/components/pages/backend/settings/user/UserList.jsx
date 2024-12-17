@@ -68,8 +68,8 @@ const UserList = ({ setItemEdit }) => {
               <tr>
                 <th>#</th>
                 <th>Status</th>
-                <th>Name</th>
-                <th>Email</th>
+                <th>Role Name</th>
+                <th>Description</th>
                 <th></th>
                 <th></th>
               </tr>

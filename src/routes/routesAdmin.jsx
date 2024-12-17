@@ -5,39 +5,36 @@ import Foods from "@/components/pages/backend/foods/Foods";
 import Developer from "@/components/pages/backend/settings/developer/Developer";
 import Role from "@/components/pages/backend/settings/role/Role";
 import Settings from "@/components/pages/backend/settings/Settings";
-import User from "@/components/pages/backend/settings/user/User";
 
-export const routeAdmin = [
+export const routesAdmin = [
   {
-    route: `admin/dashboard`,
+    route: `/admin/dashboard`,
     element: <Dashboard />,
   },
   {
-    route: `admin/advertisement`,
+    route: `/admin/advertisement`,
     element: <Advertisement />,
   },
   {
-    route: `admin/category`,
+    route: `/admin/category`,
     element: <Category />,
   },
   {
-    route: `admin/foods`,
+    route: `/admin/foods`,
     element: <Foods />,
   },
   {
-    route: `admin/settings`,
+    route: `/admin/settings`,
     element: <Settings />,
   },
   {
-    route: `admin/settings/role`,
+    route: `/admin/settings/role`,
     element: <Role />,
   },
   {
-    route: `admin/settings/developer`,
-    element: <Role />,
-  },
-  {
-    route: `admin/settings/user`,
-    element: <User />,
-  },
+    route: `/admin/settings/developer`,
+    element: <Developer />,
+    },
+  
+  
 ];
