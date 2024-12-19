@@ -1,13 +1,12 @@
 import { imgPath } from "@/components/helpers/functions-general";
 import React from "react";
-import { menus } from "../backend/menu-data";
 import useQueryData from "@/components/custom-hook/useQueryData";
-import FetchingSpinner from "@/components/partials/spinner/FetchingSpinner";
-import TableLoader from "../backend/partials/TableLoader";
+import TableLoader from "@/components/partials/TableLoader";
 import NoData from "@/components/partials/NoData";
+import FetchingSpinner from "@/components/partials/spinner/FetchingSpinner";
 
-const MenuList = ({ categoryId, cartData, setCartData, setIsSuccess }) => {
-  // const menuFilter = menus.filter((item) => item.menu_category === category);
+const FoodList = ({ categoryId, cartData, setCartData, setIsSuccess }) => {
+  // const foodFilter = foods.filter((item) => item.food_category === categoryId);
 
   const handleAdd = (item) => {
     const exist = cartData.find((data) => data.food_aid === item.food_aid);
@@ -25,11 +24,9 @@ const MenuList = ({ categoryId, cartData, setCartData, setIsSuccess }) => {
     setIsSuccess(true);
   };
 
-  console.log(cartData);
-
   const {
-    isLoading,
     isFetching,
+    isLoading,
     error,
     data: result,
     status,
@@ -49,7 +46,6 @@ const MenuList = ({ categoryId, cartData, setCartData, setIsSuccess }) => {
           <TableLoader cols={3} count={40} />
         </div>
       )}
-
       {result?.count === 0 && (
         <div className="p-10">
           <NoData />
@@ -62,10 +58,10 @@ const MenuList = ({ categoryId, cartData, setCartData, setIsSuccess }) => {
               <img
                 src={`${imgPath}/${item.food_image}`}
                 alt=""
-                className="w-[80%] mx-auto"
+                className="w-[80%] mx-auto mb-2"
               />
               <h6 className="font-bold text-sm">{item.food_title}</h6>
-              <p className="text-xm">P {item.food_price}</p>
+              <p className="text-sm">Php {item.food_price}</p>
             </button>
           ))}
       </div>
@@ -73,4 +69,4 @@ const MenuList = ({ categoryId, cartData, setCartData, setIsSuccess }) => {
   );
 };
 
-export default MenuList;
+export default FoodList;

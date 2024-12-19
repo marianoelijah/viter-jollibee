@@ -3,21 +3,21 @@
 $conn = null;
 $conn = checkDbConnection();
 // make instance of classes
-$parents = new Parents($conn);
+$advertisement = new Advertisement($conn);
 // get $_GET data
 $error = [];
 $returnData = [];
 
-if (array_key_exists("parentsid", $_GET)) {
-  $parents->parents_aid = $_GET['parentsid'];
-  checkId($parents->parents_aid);
-  $query = checkReadById($parents);
+if (array_key_exists("advertisementid", $_GET)) {
+  $advertisement->ads_aid = $_GET['advertisementid'];
+  checkId($advertisement->ads_aid);
+  $query = checkReadById($advertisement);
   http_response_code(200);
   getQueriedData($query);
 }
 
 if (empty($_GET)) {
-  $query = checkReadAll($parents);
+  $query = checkReadAll($advertisement);
   http_response_code(200);
   getQueriedData($query);
 }

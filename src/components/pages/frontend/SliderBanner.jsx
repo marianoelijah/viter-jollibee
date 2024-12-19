@@ -1,27 +1,75 @@
-import React from 'react'
+import React from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { imgPath } from '@/components/helpers/functions-general';
-import Slider from 'react-slick';
+import { imgPath } from "@/components/helpers/functions-general";
+import Slider from "react-slick";
+import useQueryData from "@/components/custom-hook/useQueryData";
+import FetchingSpinner from "@/components/partials/spinner/FetchingSpinner";
+import ServerError from "@/components/partials/ServerError";
 
+const SliderBanner = ({
+  isLoadingAdvertisement,
+  isFetchingAdvertisement,
+  errorAdvertisement,
+  dataAdvertisement,
+}) => {
+  let settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2400,
+  };
 
-const SliderBanner = () => {
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoPlay: true,
-        autoplaySpeed: 3000,
-      };
+  // const {
+  //   isFetching,
+  //   isLoading,
+  //   error,
+  //   data: result,
+  //   status,
+  // } = useQueryData(
+  //   `/v2/advertisement`, // endpoint
+  //   "get", // method
+  //   "advertisement" // key
+  // );
+
+  // const {
+  //   isFetching,
+  //   isLoading,
+  //   error,
+  //   data: result,
+  //   status,
+  // } = useQueryData(
+  //   `/v2/advertisement`, // endpoint
+  //   "get", // method
+  //   "advertisement" // key
+  // );
+
   return (
-    <Slider {...settings}>
-        <img src={`${imgPath}/slider-1.jpg`} alt="" className='h-[200px] object-cover w-full'/>
-        <img src={`${imgPath}/slider-2.png`} alt="" className='h-[200px] object-cover w-full'/>
-        <img src={`${imgPath}/slider-3.jpg`} alt="" className='h-[200px] object-cover w-full'/>
-    </Slider>
-  )
-}
+    <>
+      <div className="relative h-[200px]">
+        {(isFetchingAdvertisement || isLoadingAdvertisement) && (
+          <FetchingSpinner />
+        )}
+        {errorAdvertisement && <ServerError />}
+        <Slider {...settings} className="transition-all">
+          {dataAdvertisement?.count > 0 &&
+            dataAdvertisement.data.map((item, key) => {
+              return (
+                <img
+                  key={key}
+                  src={`${imgPath}/${item.ads_image}`}
+                  alt={item.ads_image}
+                  className="h-[200px] object-cover object-center"
+                />
+              );
+            })}
+          
+        </Slider>
+      </div>
+    </>
+  );
+};
 
 export default SliderBanner;

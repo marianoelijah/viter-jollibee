@@ -22,7 +22,7 @@ const useUploadPhoto = (url) => {
     }
 
     const img = e.target.files[0];
-    if (img.size > 150000) {
+    if (img.size > 999999) {
       dispatch(setError(true));
       dispatch(
         setMessage(

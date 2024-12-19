@@ -15,7 +15,7 @@ if (array_key_exists("categoryid", $_GET)) {
 
   $query = checkDelete($category);
 
-  returnSuccess($category, "category", $query);
+  returnSuccess($category, "Departments", $query);
 }
 
 // return 404 error if endpoint not available

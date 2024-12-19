@@ -14,8 +14,8 @@ const Order = () => {
   const [isSuccess, setIsSuccess] = React.useState(false);
 
   const {
-    isLoading,
     isFetching,
+    isLoading,
     error,
     data: result,
     status,
@@ -25,7 +25,19 @@ const Order = () => {
     "category" // key
   );
 
+  const {
+    isLoading: isLoadingAdvertisement,
+    isFetching: isFetchingAdvertisement,
+    error: errorAdvertisement,
+    data: dataAdvertisement,
+  } = useQueryData(
+    `/v2/advertisement/read-all-active-advertisement`, // endpoint
+    "get", // method
+    "advertisement/read-all-active-advertisement" // key
+  );
+
   const getCategoryName = (categoryId, categoryResult) => {
+    // initialize another array
     let categorySelectedName = "";
 
     categoryResult?.data.map((item) => {
@@ -44,19 +56,22 @@ const Order = () => {
     return acc + item.food_price * item.quantity;
   }, 0);
 
-
-
   return (
     <>
-      <SliderBanner />
+      <SliderBanner
+        isLoadingAdvertisement={isLoadingAdvertisement}
+        isFetchingAdvertisement={isFetchingAdvertisement}
+        errorAdvertisement={errorAdvertisement}
+        dataAdvertisement={dataAdvertisement}
+      />
       <div className="grid grid-rows-[auto,_1fr,_auto] min-h-[calc(100vh-200px)]">
-        <MenuTitle categoryId={categoryId} />
+        <MenuTitle categoryName={categoryName} />
         <section className="grid grid-cols-[150px,_1fr] bg-myred px-3">
           <aside className="m-1 bg-white rounded-md h-[60.5vh] overflow-y-scroll custom-scroll">
             <SideNav
               setCategoryId={setCategoryId}
-              isFetching={isFetching}
               isLoading={isLoading}
+              isFetching={isFetching}
               result={result}
             />
           </aside>

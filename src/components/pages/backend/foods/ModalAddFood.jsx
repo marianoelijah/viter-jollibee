@@ -1,31 +1,23 @@
-import React from "react";
-import ModalWrapper from "../partials/Modals/ModalWrapper";
-import { ImagePlusIcon, X } from "lucide-react";
-import SpinnerButton from "../partials/spinners/SpinnerButton";
-import {
-  setError,
-  setIsAdd,
-  setMessage,
-  setSuccess,
-} from "@/components/store/storeAction";
 import { StoreContext } from "@/components/store/storeContext";
-import { Form, Formik } from "formik";
-import {
-  InputPhotoUpload,
-  InputSelect,
-  InputText,
-} from "@/components/helpers/FormInputs";
-import * as Yup from "Yup";
-import useUploadPhoto from "@/components/custom-hook/useUploadPhoto";
-import { imgPath } from "@/components/helpers/functions-general";
+import { ImagePlusIcon, X } from "lucide-react";
+import React from "react";
+import ModalWrapper from "../partials/modals/ModalWrapper";
+import SpinnerButton from "../partials/spinners/SpinnerButton";
+
 import useQueryData from "@/components/custom-hook/useQueryData";
+import useUploadPhoto from "@/components/custom-hook/useUploadPhoto";
+import { InputPhotoUpload, InputSelect, InputText } from "@/components/helpers/FormInputs";
+import { Form, Formik } from "formik";
+import * as Yup from "Yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryData } from "@/components/helpers/queryData";
+import { setError, setIsAdd, setMessage, setSuccess } from "@/components/store/storeAction";
+import { imgPath } from "@/components/helpers/functions-general";
 
 const ModalAddFood = ({ itemEdit }) => {
-  const { dispatch, store } = React.useContext(StoreContext);
-  const { uploadPhoto, handleChangePhoto, photo } = useUploadPhoto("");
+  const { dispatch } = React.useContext(StoreContext);
   const [value, setValue] = React.useState("");
+  const { uploadPhoto, handleChangePhoto, photo } = useUploadPhoto("");
 
   const handleClose = () => {
     dispatch(setIsAdd(false));
@@ -38,19 +30,21 @@ const ModalAddFood = ({ itemEdit }) => {
   const {
     isFetching,
     error,
-    data: categ,
     status,
+    data: categ,
   } = useQueryData(
-    `/v2/category`, //endpoint
-    "get", //method
-    "category" //key
+    `/v2/category`, // endpoint
+    "get", // method
+    "category" // key
   );
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (values) =>
       queryData(
-        itemEdit ? `/v2/food/${itemEdit.food_aid}` : "/v2/food",
+        itemEdit
+          ? `/v2/food/${itemEdit.food_aid}`
+          : "/v2/food",
         itemEdit ? "PUT" : "POST",
         values
       ),
@@ -73,26 +67,31 @@ const ModalAddFood = ({ itemEdit }) => {
   });
 
   const initVal = {
+    food_image: itemEdit ? itemEdit.food_image : "",
     food_title: itemEdit ? itemEdit.food_title : "",
-    food_category_id: itemEdit ? itemEdit.food_category_id : "",
     food_price: itemEdit ? itemEdit.food_price : "",
+    food_category_id: itemEdit ? itemEdit.food_category_id : "",
   };
 
   const yupSchema = Yup.object({
-    food_title: Yup.string().required("* Required"),
-    food_category_id: Yup.string().required("* Required"),
-    food_price: Yup.string().required("* Required"),
+    food_title: Yup.string().required("Required"),
+    food_price: Yup.string().required("Required"),
+    food_category_id: Yup.string().required("Required"),
   });
+
+
+
   return (
     <>
       <ModalWrapper>
-        <div className="modal-side fixed absolute top-0 right-0 bg-primary h-[100dvh] w-[300px] border-l border-line">
+        <div className="modal-side absolute top-0 right-0 bg-primary h-[100dvh] w-[300px] border-l border-line">
           <div className="modal-header p-4 flex justify-between items-center">
-            <h5 className="mb-0">Add Food</h5>
+            <h5 className="mb-0">Add food</h5>
             <button onClick={handleClose}>
               <X />
             </button>
           </div>
+
           <Formik
             initialValues={initVal}
             validationSchema={yupSchema}
@@ -115,6 +114,15 @@ const ModalAddFood = ({ itemEdit }) => {
                 <Form>
                   <div className="modal-form h-full max-h-[calc(100vh-56px)] grid grid-rows-[1fr_auto]">
                     <div className="form-wrapper p-4 max-h-[85vh] h-full overflow-y-auto custom-scroll">
+                      <div className="input-wrap">
+                        <InputText
+                          label="Title"
+                          type="text"
+                          name="food_title"
+                          onChange={handleChange}
+                        />
+                      </div>
+
                       <div className="input-wrap relative  group input-photo-wrap h-[150px] ">
                         <label htmlFor="">Photo</label>
                         {itemEdit === null && photo === null ? (
@@ -124,7 +132,6 @@ const ModalAddFood = ({ itemEdit }) => {
                               strokeWidth={1}
                               className="opacity-20 group-hover:opacity-50 transition-opacity"
                             />
-
                             <small className="opacity-20 group-hover:opacity-50 transition-opacity">
                               Upload Photo
                             </small>
@@ -136,7 +143,7 @@ const ModalAddFood = ({ itemEdit }) => {
                                 ? URL.createObjectURL(photo) // preview
                                 : imgPath + "/" + itemEdit?.food_image // check db
                             }
-                            alt="employee photo"
+                            alt="food photo"
                             className={`group-hover:opacity-30 duration-200 relative object-cover h-full w-full  m-auto `}
                           />
                         )}
@@ -148,21 +155,15 @@ const ModalAddFood = ({ itemEdit }) => {
                           title="Upload photo"
                           onChange={(e) => handleChangePhoto(e)}
                           onDrop={(e) => handleChangePhoto(e)}
-                          className={`opacity-0 absolute top-0 right-0 bottom-0 left-0 rounded-full  m-auto cursor-pointer w-full h-full`}
+                          className={`opacity-0 absolute top-0 right-0 bottom-0 left-0 rounded-full  m-auto cursor-pointer w-full h-full ${
+                            mutation.isPending ? "pointer-events-none" : ""
+                          }`}
                         />
                       </div>
 
-                      <div className="input-wrap mt-10">
+                      <div className="input-wrap mt-8">
                         <InputText
-                          label="Food Title"
-                          type="text"
-                          name="food_title"
-                          onChange={handleChange}
-                        />
-                      </div>
-                      <div className="input-wrap">
-                        <InputText
-                          label="Food Price"
+                          label="Price"
                           type="text"
                           name="food_price"
                           onChange={handleChange}
@@ -174,7 +175,7 @@ const ModalAddFood = ({ itemEdit }) => {
                           name="food_category_id"
                           onChange={handleChange}
                         >
-                          <option value="hidden"></option>
+                          <option value="" hidden></option>
                           {categ?.data.map((item, key) => {
                             return (
                               <>
@@ -189,14 +190,14 @@ const ModalAddFood = ({ itemEdit }) => {
                         </InputSelect>
                       </div>
                     </div>
-                    <div className="form-action flex p-4 justify-end gap-5">
-                      <button className="btn btn-accent" type="submit">
-                        {mutation.isPending ? <SpinnerButton /> : "Save"}
+                    <div className="form-action flex p-4 justify-end gap-3">
+                      <button className="btn btn-add" type="submit">
+                        {mutation.isPending ? <SpinnerButton /> : "Add"}
                       </button>
                       <button
                         className="btn btn-cancel"
-                        onClick={handleClose}
                         type="reset"
+                        onClick={handleClose}
                       >
                         Cancel
                       </button>

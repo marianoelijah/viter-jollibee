@@ -13,11 +13,14 @@ import ToastSuccess from "../partials/ToastSuccess";
 import ModalValidation from "../partials/modals/ModalValidation";
 
 const Advertisement = () => {
-    const { dispatch, store } = React.useContext(StoreContext);
+  const { dispatch, store } = React.useContext(StoreContext);
 
-    const handleAdd = () => {
-      dispatch(setIsAdd(true));
-    };
+  const [itemEdit, setItemEdit] = React.useState(null);
+
+  const handleAdd = () => {
+    dispatch(setIsAdd(true));
+    setItemEdit(null);
+  };
   return (
     <>
       <section className="layout-main">
@@ -28,16 +31,18 @@ const Advertisement = () => {
               title="Advertisement"
               subtitle="Manage Kiosk Advertisement"
             />
-            <div className="p-8">
+            <div className="p-1">
               <div className="flex justify-between items-center ">
-                <SearchBar />
-
+                <div></div>
                 <button className="btn btn-add" onClick={handleAdd}>
                   <Plus size={16} />
                   Add New
                 </button>
               </div>
-              <AdvertisementTable />
+              <AdvertisementTable
+                itemEdit={itemEdit}
+                setItemEdit={setItemEdit}
+              />
             </div>
             <Footer />
           </main>
@@ -49,7 +54,9 @@ const Advertisement = () => {
       {store.success && <ToastSuccess />}
       {/* <SpinnerWindow /> */}
 
-      {store.isAdd && <ModalAddAdvertisement />}
+      {store.isAdd && (
+        <ModalAddAdvertisement itemEdit={itemEdit} setItemEdit={setItemEdit} />
+      )}
     </>
   );
 };

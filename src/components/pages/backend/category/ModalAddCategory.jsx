@@ -19,9 +19,11 @@ import useUploadPhoto from "@/components/custom-hook/useUploadPhoto";
 import { imgPath } from "@/components/helpers/functions-general";
 
 const ModalAddCategory = ({ isCategoryEdit, setIsCategoryEdit }) => {
-  const { dispatch, store } = React.useContext(StoreContext);
-   const { uploadPhoto, handleChangePhoto, photo } = useUploadPhoto("/v2/upload-photo");
+  const { dispatch } = React.useContext(StoreContext);
   const [value, setValue] = React.useState("");
+  const { uploadPhoto, handleChangePhoto, photo } = useUploadPhoto("");
+
+  const queryClient = useQueryClient();
 
   const handleClose = () => {
     dispatch(setIsAdd(false));
@@ -31,7 +33,17 @@ const ModalAddCategory = ({ isCategoryEdit, setIsCategoryEdit }) => {
     setValue(event.target.value);
   };
 
-  const queryClient = useQueryClient();
+  const {
+    isLoading,
+    isFetching,
+    error,
+    data: results,
+  } = useQueryData(
+    `/v2/category`, // endpoint
+    "get", // method
+    "category" // key
+  );
+
   const mutation = useMutation({
     mutationFn: (values) =>
       queryData(
@@ -60,12 +72,10 @@ const ModalAddCategory = ({ isCategoryEdit, setIsCategoryEdit }) => {
   });
 
   const initVal = {
-    category_image: isCategoryEdit ? isCategoryEdit.category_image : "",
     category_title: isCategoryEdit ? isCategoryEdit.category_title : "",
   };
-
   const yupSchema = Yup.object({
-    category_title: Yup.string().required("* Required"),
+    category_title: Yup.string().required("Required"),
   });
 
   return (
@@ -129,9 +139,8 @@ const ModalAddCategory = ({ isCategoryEdit, setIsCategoryEdit }) => {
                               photo
                                 ? URL.createObjectURL(photo) // preview
                                 : imgPath + "/" + isCategoryEdit?.category_image // check db
-                                
                             }
-                            alt="category photo"
+                            alt="food photo"
                             className={`group-hover:opacity-30 duration-200 relative object-cover h-full w-full  m-auto `}
                           />
                         )}
@@ -143,14 +152,15 @@ const ModalAddCategory = ({ isCategoryEdit, setIsCategoryEdit }) => {
                           title="Upload photo"
                           onChange={(e) => handleChangePhoto(e)}
                           onDrop={(e) => handleChangePhoto(e)}
-                          className={`opacity-0 absolute top-0 right-0 bottom-0 left-0 rounded-full  m-auto cursor-pointer w-full h-full`}
+                          className={`opacity-0 absolute top-0 right-0 bottom-0 left-0 rounded-full  m-auto cursor-pointer w-full h-full ${
+                            mutation.isPending ? "pointer-events-none" : ""
+                          }`}
                         />
                       </div>
                     </div>
-                    <div className="form-action flex p-4 justify-end gap-5">
-                      <button className="btn btn-accent" type="submit">
-                        <SpinnerButton />
-                        Save
+                    <div className="form-action flex p-4 justify-end gap-3">
+                      <button className="btn btn-add" type="submit">
+                        {mutation.isPending ? <SpinnerButton /> : "Save"}
                       </button>
                       <button
                         className="btn btn-cancel"

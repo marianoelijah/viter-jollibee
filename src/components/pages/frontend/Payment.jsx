@@ -19,7 +19,7 @@ const Payment = ({ handleProcessing, setOption }) => {
         <div className="madal-main h-[60vh] w-full flex justify-center items-center">
           <div className="flex flex-col items-center">
             <img
-              src={`${imgPath}/jollibee logo.png`}
+              src={`${imgPath}/jollibee-logo.png`}
               alt=""
               className="mx-auto mb-5 w-[90px]"
             />
@@ -28,7 +28,7 @@ const Payment = ({ handleProcessing, setOption }) => {
               Select preferred payment option
             </p>
             <button
-              className="bg-primary px-8 py-4 w-[250px] flex justify-center gap-2 font-bold text-white items-center rounded-md"
+              className="bg-myred px-8 py-4 w-[250px] flex justify-center gap-2 font-bold text-white items-center rounded-md"
               onClick={handleProcessing}
             >
               <PhilippinePeso />
@@ -36,7 +36,7 @@ const Payment = ({ handleProcessing, setOption }) => {
             </button>
             <h3 className="my-3">or</h3>
             <button
-              className="bg-primary px-8 py-4 w-[250px] flex justify-center gap-2 font-bold text-white items-center rounded-md"
+              className="bg-myred px-8 py-4 w-[250px] flex justify-center gap-2 font-bold text-white items-center rounded-md"
               onClick={handleProcessing}
             >
               <CreditCard /> Card / Online Payment

@@ -3,27 +3,71 @@ import ModalWrapper from "../partials/modals/ModalWrapper";
 import { ImagePlusIcon, X } from "lucide-react";
 import SpinnerButton from "../partials/spinners/SpinnerButton";
 import { StoreContext } from "@/components/store/storeContext";
-import { setIsAdd } from "@/components/store/storeAction";
+import {
+  setError,
+  setIsAdd,
+  setMessage,
+  setSuccess,
+} from "@/components/store/storeAction";
 import { Form, Formik } from "formik";
-import { InputPhotoUpload, InputText, InputTextArea } from "@/components/helpers/FormInputs";
+import {
+  InputPhotoUpload,
+  InputText,
+  InputTextArea,
+} from "@/components/helpers/FormInputs";
 import * as Yup from "Yup";
 import useUploadPhoto from "@/components/custom-hook/useUploadPhoto";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { queryData } from "@/components/helpers/queryData";
+import { imgPath } from "@/components/helpers/functions-general";
 
-const ModalAddAdvertisement = () => {
+const ModalAddAdversitement = ({ itemEdit }) => {
   const { dispatch } = React.useContext(StoreContext);
+  const [value, setValue] = React.useState("");
   const { uploadPhoto, handleChangePhoto, photo } = useUploadPhoto("");
+
+  const queryClient = useQueryClient();
 
   const handleClose = () => {
     dispatch(setIsAdd(false));
   };
 
-  const initVal = {
-    advertisement_title: "",
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
 
+  const mutation = useMutation({
+    mutationFn: (values) =>
+      queryData(
+        itemEdit
+          ? `/v2/advertisement/${itemEdit.ads_aid}`
+          : "/v2/advertisement",
+        itemEdit ? "PUT" : "POST",
+        values
+      ),
+    onSuccess: (data) => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["advertisement"] });
+
+      // show error box
+      if (!data.success) {
+        dispatch(setError(true));
+        dispatch(setMessage(data.error));
+        dispatch(setSuccess(false));
+      } else {
+        console.log("Success");
+        dispatch(setIsAdd(false));
+        dispatch(setSuccess(true));
+        dispatch(setMessage("Successful!"));
+      }
+    },
+  });
+
+  const initVal = {
+    ads_title: itemEdit ? itemEdit.ads_title : "",
   };
   const yupSchema = Yup.object({
-    advertisement_title: Yup.string().required("Required"),
-    
+    ads_title: Yup.string().required("Required"),
   });
 
   return (
@@ -31,7 +75,9 @@ const ModalAddAdvertisement = () => {
       <ModalWrapper>
         <div className="modal-side absolute top-0 right-0 bg-primary h-[100dvh] w-[300px] border-l border-line">
           <div className="modal-header p-4 flex justify-between items-center">
-            <h5 className="mb-0">Add Advertisement</h5>
+            <h5 className="mb-0">
+              {itemEdit ? "Update" : "Add"} Advertisement
+            </h5>
             <button onClick={handleClose}>
               <X />
             </button>
@@ -41,7 +87,17 @@ const ModalAddAdvertisement = () => {
             initialValues={initVal}
             validationSchema={yupSchema}
             onSubmit={async (values) => {
-              console.log(values);
+              mutation.mutate({
+                ...values,
+                ads_image:
+                  (itemEdit?.ads_image === "" && photo) ||
+                  (!photo && "") ||
+                  (photo === undefined && "") ||
+                  (photo && itemEdit?.ads_image !== photo?.name)
+                    ? photo?.name || ""
+                    : itemEdit?.ads_image || "",
+              });
+              uploadPhoto();
             }}
           >
             {(props) => {
@@ -53,13 +109,14 @@ const ModalAddAdvertisement = () => {
                         <InputText
                           label="Title"
                           type="text"
-                          name="advertisement_title"
+                          name="ads_title"
+                          onChange={handleChange}
                         />
                       </div>
 
                       <div className="input-wrap relative  group input-photo-wrap h-[150px] ">
                         <label htmlFor="">Photo</label>
-                        {photo === null ? (
+                        {itemEdit === null && photo === null ? (
                           <div className="w-full border border-line rounded-md flex justify-center items-center flex-col h-full">
                             <ImagePlusIcon
                               size={50}
@@ -73,9 +130,9 @@ const ModalAddAdvertisement = () => {
                         ) : (
                           <img
                             src={
-                              true
+                              photo
                                 ? URL.createObjectURL(photo) // preview
-                                : imgPath + "/" + itemEdit?.movies_image // check db
+                                : imgPath + "/" + itemEdit?.ads_image // check db
                             }
                             alt="employee photo"
                             className={`group-hover:opacity-30 duration-200 relative object-cover h-full w-full  m-auto `}
@@ -89,13 +146,15 @@ const ModalAddAdvertisement = () => {
                           title="Upload photo"
                           onChange={(e) => handleChangePhoto(e)}
                           onDrop={(e) => handleChangePhoto(e)}
-                          className={`opacity-0 absolute top-0 right-0 bottom-0 left-0 rounded-full  m-auto cursor-pointer w-full h-full`}
+                          className={`opacity-0 absolute top-0 right-0 bottom-0 left-0 rounded-full  m-auto cursor-pointer w-full h-full ${
+                            mutation.isPending ? "pointer-events-none" : ""
+                          }`}
                         />
                       </div>
                     </div>
                     <div className="form-action flex p-4 justify-end gap-3">
                       <button className="btn btn-add" type="submit">
-                        <SpinnerButton /> Save
+                        {mutation.isPending ? <SpinnerButton /> : "Save"}
                       </button>
                       <button
                         className="btn btn-cancel"
@@ -116,4 +175,4 @@ const ModalAddAdvertisement = () => {
   );
 };
 
-export default ModalAddAdvertisement;
+export default ModalAddAdversitement;

@@ -5,34 +5,43 @@ require '../../core/header.php';
 require '../../core/functions.php';
 require 'functions.php';
 // use needed classes
-require '../../models/food/Food.php';
+require '../../models/category/Category.php';
 
 
 // check database connection
 $conn = null;
 $conn = checkDbConnection();
 // make instance of classes
-$food = new Food($conn);
+$category = new Category($conn);
 $response = new Response();
-// validate api key
-// get payload
+
 $body = file_get_contents("php://input");
 $data = json_decode($body, true);
+
+// validate api key
 if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
     checkApiKey();
-    checkPayLoad($data);
+    checkPayload($data);
 
-    if ($data['categoryId'] != '') {
 
-        $food->food_category_id = $data['categoryId'];
-        $query = checkReadAllByCategoryId($food);
-        http_response_code(200);
+    $category->category_search = $data['searchValue'];
+
+    http_response_code(200);
+
+    if ($data['isFilter']) {
+        $category->category_is_active = checkIndex($data, 'statusFilter');
+
+        if ($category->category_search != '') {
+            $query = checkFilterActiveSearch($category);
+            getQueriedData($query);
+        }
+        $query = checkFilterActive($category);
         getQueriedData($query);
     }
 
-    $query = checkReadAll($food);
-    http_response_code(200);
+    $query = checkSearch($category);
     getQueriedData($query);
+
 
     // return 404 error if endpoint not available
     checkEndpoint();

@@ -8,6 +8,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 Header set Access-Control-Allow-Origin *
  
 
+
 RewriteRule ^category$ controllers/category/category.php [L]
 RewriteRule ^category/([0-9]+)$ controllers/category/category.php?categoryid=$1 [L]
 RewriteRule ^category/active/([0-9]+)$ controllers/category/active.php?categoryid=$1 [L]
@@ -15,10 +16,16 @@ RewriteRule ^category/page/([0-9]+)$ controllers/category/page.php?start=$1 [L]
 RewriteRule ^category/search$ controllers/category/search.php [L]
 
 
+RewriteRule ^advertisement$ controllers/advertisement/advertisement.php [L]
+RewriteRule ^advertisement/([0-9]+)$ controllers/advertisement/advertisement.php?advertisementid=$1 [L]
+RewriteRule ^advertisement/active/([0-9]+)$ controllers/advertisement/active.php?advertisementid=$1 [L]
+RewriteRule ^advertisement/page/([0-9]+)$ controllers/advertisement/page.php?start=$1 [L]
+RewriteRule ^advertisement/search$ controllers/advertisement/search.php [L]
+RewriteRule ^advertisement/read-all-active-advertisement$ controllers/advertisement/read-all-active-advertisement.php [L]
+
 RewriteRule ^role$ controllers/settings/users/role/role.php [L]
 RewriteRule ^role/([0-9]+)$ controllers/settings/users/role/role.php?roleid=$1 [L]
 RewriteRule ^role/active/([0-9]+)$ controllers/settings/users/role/active.php?roleid=$1 [L]
-
 
 RewriteRule ^food$ controllers/food/food.php [L]
 RewriteRule ^food/([0-9]+)$ controllers/food/food.php?foodid=$1 [L]

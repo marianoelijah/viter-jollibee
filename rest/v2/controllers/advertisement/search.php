@@ -5,34 +5,43 @@ require '../../core/header.php';
 require '../../core/functions.php';
 require 'functions.php';
 // use needed classes
-require '../../models/food/Food.php';
+require '../../models/advertisement/Advertisement.php';
 
 
 // check database connection
 $conn = null;
 $conn = checkDbConnection();
 // make instance of classes
-$food = new Food($conn);
+$advertisement = new Advertisement($conn);
 $response = new Response();
-// validate api key
-// get payload
+
 $body = file_get_contents("php://input");
 $data = json_decode($body, true);
+
+// validate api key
 if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
     checkApiKey();
-    checkPayLoad($data);
+    checkPayload($data);
 
-    if ($data['categoryId'] != '') {
 
-        $food->food_category_id = $data['categoryId'];
-        $query = checkReadAllByCategoryId($food);
-        http_response_code(200);
+    $advertisement->ads_search = $data['searchValue'];
+
+    http_response_code(200);
+
+    if ($data['isFilter']) {
+        $advertisement->ads_is_active = checkIndex($data, 'statusFilter');
+
+        if ($advertisement->ads_search != '') {
+            $query = checkFilterActiveSearch($advertisement);
+            getQueriedData($query);
+        }
+        $query = checkFilterActive($advertisement);
         getQueriedData($query);
     }
 
-    $query = checkReadAll($food);
-    http_response_code(200);
+    $query = checkSearch($advertisement);
     getQueriedData($query);
+
 
     // return 404 error if endpoint not available
     checkEndpoint();

@@ -1,16 +1,12 @@
 import { queryData } from "@/components/helpers/queryData";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
-import { FaTrashRestore } from "react-icons/fa";
-import { GrFormClose } from "react-icons/gr";
+
 import ButtonSpinner from "../spinner/ButtonSpinner";
-import {
-  setError,
-  setIsRestore,
-  setMessage,
-  setSuccess,
-} from "@/components/store/storeAction";
 import { StoreContext } from "@/components/store/storeContext";
+import { FaTrashRestore } from "react-icons/fa";
+import { setIsRestore } from "@/components/store/storeAction";
 
 const ModalRestore = ({ setIsArchive, mysqlEndpoint, queryKey, item }) => {
   const { store, dispatch } = React.useContext(StoreContext);
@@ -30,12 +26,10 @@ const ModalRestore = ({ setIsArchive, mysqlEndpoint, queryKey, item }) => {
       if (!data.success) {
         dispatch(setError(true));
         dispatch(setMessage(data.error));
-        dispatch(setSuccess(true));
-        // console.log("May error!");
+        dispatch(setIsRestore(false));
       } else {
         dispatch(setIsRestore(false));
         dispatch(setSuccess(true));
-        // console.log("Naysuu!");
       }
     },
   });
@@ -59,7 +53,6 @@ const ModalRestore = ({ setIsArchive, mysqlEndpoint, queryKey, item }) => {
             <FaTrashRestore size={30} className="" />
           </h2>
           <button onClick={handleClose}>
-            <GrFormClose size={25} />
           </button>
         </div>
         <div className="p-4 text-center">

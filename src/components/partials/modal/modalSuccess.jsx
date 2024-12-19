@@ -1,7 +1,7 @@
 import React from "react";
 import { GetFocus, devNavUrl } from "../../helpers/functions-general";
-import { StoreContext } from "@/components/store/storeContext";
 import { setSuccess } from "@/components/store/storeAction";
+import { StoreContext } from "@/components/store/storeContext";
 
 const ModalSuccess = () => {
   const { store, dispatch } = React.useContext(StoreContext);

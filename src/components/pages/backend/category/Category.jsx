@@ -12,7 +12,6 @@ import ToastSuccess from "../partials/ToastSuccess";
 import CategoryTable from "./CategoryTable";
 import ModalAddCategory from "./ModalAddCategory";
 
-
 const Category = () => {
   const { dispatch, store } = React.useContext(StoreContext);
 
@@ -32,8 +31,7 @@ const Category = () => {
             <Header title="Category" subtitle="Manage Kiosk Category" />
             <div className="p-8">
               <div className="flex justify-between items-center ">
-                <SearchBar />
-
+              <div></div>
                 <button className="btn btn-add" onClick={handleAdd}>
                   <Plus size={16} />
                   Add New
@@ -50,7 +48,7 @@ const Category = () => {
       </section>
 
       {store.validate && <ModalValidation />}
-      {/* {store.error && <ModalError />} */}
+      {store.error && <ModalError />}
       {store.success && <ToastSuccess />}
       {/* <SpinnerWindow /> */}
 

@@ -1,13 +1,11 @@
 import { queryData } from "@/components/helpers/queryData";
-import {
-  setError,
-  setMessage,
-  setSuccess,
-} from "@/components/store/storeAction";
 import { StoreContext } from "@/components/store/storeContext";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
-import { FaArchive } from "react-icons/fa";
+// import { FaArchive } from "react-icons/fa";
+// import { GrFormClose } from "react-icons/gr";
+// import ButtonSpinner from "../spinner/ButtonSpinner";
 
 const ModalArchive = ({ setIsArchive, mysqlEndpoint, queryKey, item }) => {
   const { store, dispatch } = React.useContext(StoreContext);
@@ -27,13 +25,11 @@ const ModalArchive = ({ setIsArchive, mysqlEndpoint, queryKey, item }) => {
       if (!data.success) {
         dispatch(setError(true));
         dispatch(setMessage(data.error));
-        dispatch(setSuccess(true));
-        // console.log("May error!");
+        dispatch(setSuccess(false));
       } else {
         dispatch(setIsArchive(false));
         dispatch(setSuccess(true));
         dispatch(setMessage("Successful!"));
-        // console.log("Naysuu!");
       }
     },
   });
@@ -56,7 +52,9 @@ const ModalArchive = ({ setIsArchive, mysqlEndpoint, queryKey, item }) => {
           <h2 className="translate-y-2">
             <FaArchive size={30} className="" />
           </h2>
-          <button onClick={handleClose}></button>
+          <button onClick={handleClose}>
+            {/* <GrFormClose size={25} /> */}
+          </button>
         </div>
         <div className="p-4 text-center">
           <h3 className="text-sm">Are you sure you want to archive {item}?</h3>
@@ -65,7 +63,7 @@ const ModalArchive = ({ setIsArchive, mysqlEndpoint, queryKey, item }) => {
               className="inline-block rounded-md w-full px-5 py-2 bg-[#9f1659] text-white"
               onClick={handleYes}
             >
-              Confirm
+              {/* {mutation.isPending ? <ButtonSpinner /> : "Yes"} */}
             </button>
             <button
               className="inline-block rounded-md w-full px-5 py-2 bg-gray-200 text-gray-800"

@@ -3,31 +3,46 @@
 require '../../core/header.php';
 // use needed functions
 require '../../core/functions.php';
-// require 'functions.php';
+require 'functions.php'; // NEED FOR LATER
 // use needed classes
-require '../../models/role/role.php';
+require '../../models/food/Food.php';
+
 
 // check database connection
 $conn = null;
 $conn = checkDbConnection();
 // make instance of classes
-$role = new Role($conn);
+$food = new Food($conn);
 $response = new Response();
-// get payload
+
 $body = file_get_contents("php://input");
 $data = json_decode($body, true);
-// // validate api key
+
+// validate api key
 if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
     checkApiKey();
-    if (empty($_GET)) {
-        // check data
-        checkPayload($data);
-        // get task id from query string
-        $role->role_search = $data["search"];
-        $query = checkSearch($role);
-        http_response_code(200);
+    checkPayload($data);
+
+
+    $food->food_search = $data['searchValue'];
+
+    http_response_code(200);
+
+    if ($data['isFilter']) {
+        $food->food_is_active = checkIndex($data, 'statusFilter');
+
+        if ($food->food_search != '') {
+            $query = checkFilterActiveSearch($food);
+            getQueriedData($query);
+        }
+        $query = checkFilterActive($food);
         getQueriedData($query);
     }
+
+    $query = checkSearch($food);
+    getQueriedData($query);
+
+
     // return 404 error if endpoint not available
     checkEndpoint();
 }
