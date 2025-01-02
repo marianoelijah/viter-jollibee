@@ -19,7 +19,7 @@ $role->role_datetime = date("Y-m-d H:i:s");
 isNameExist($role, $role->role_name);
 
 $query = checkCreate($role);
-checkAddColumn($role, $role->role_name);
-checkUpdateColumnValue($role, $role->role_name);
+checkAddColumn($role, strtolower($role->role_name));
+checkUpdateColumnValue($role, strtolower($role->role_name));
 
 returnSuccess($role, "role", $query);

@@ -1,6 +1,7 @@
 import React from "react";
 import { menus } from "../menu-data";
-import { getFoodByCategory } from "./function";
+import { getFoodByCategory } from "./functions";
+
 
 const DashboardCard = ({ item, resultFood }) => {
   const foodItem = getFoodByCategory(item.category_aid, resultFood);

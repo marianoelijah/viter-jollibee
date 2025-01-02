@@ -14,7 +14,6 @@ import ModalAddCategory from "./ModalAddCategory";
 
 const Category = () => {
   const { dispatch, store } = React.useContext(StoreContext);
-
   const [isCategoryEdit, setIsCategoryEdit] = React.useState(null);
 
   const handleAdd = () => {

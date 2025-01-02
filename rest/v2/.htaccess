@@ -27,6 +27,13 @@ RewriteRule ^role$ controllers/settings/users/role/role.php [L]
 RewriteRule ^role/([0-9]+)$ controllers/settings/users/role/role.php?roleid=$1 [L]
 RewriteRule ^role/active/([0-9]+)$ controllers/settings/users/role/active.php?roleid=$1 [L]
 
+## DEVELOPER ###
+RewriteRule ^developer$ controllers/developer/settings/user/developer/developer.php [L]
+RewriteRule ^developer/([0-9]+)$ controllers/developer/settings/user/developer/developer.php?developerid=$1 [L]
+RewriteRule ^developer/active/([0-9]+)$ controllers/developer/settings/user/developer/active.php?developerid=$1 [L]
+RewriteRule ^developer/page/([0-9]+)$ controllers/developer/settings/user/developer/page.php?start=$1 [L]
+RewriteRule ^developer/search$ controllers/developer/settings/user/developer/search.php [L]
+
 RewriteRule ^food$ controllers/food/food.php [L]
 RewriteRule ^food/([0-9]+)$ controllers/food/food.php?foodid=$1 [L]
 RewriteRule ^food/active/([0-9]+)$ controllers/food/active.php?foodid=$1 [L]

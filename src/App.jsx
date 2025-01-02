@@ -8,6 +8,7 @@ import Welcome from "./components/pages/frontend/Welcome";
 import { StoreProvider } from "./components/store/storeContext";
 import { routesDeveloper } from "./routes/RoutesDeveloper";
 import { routesAdmin } from "./routes/routesAdmin";
+import DeveloperCreatePassword from "./components/pages/backend/access/create-password/DeveloperCreatePassword";
 
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
             <Route path="/admin/dashboard" element={<Dashboard />} /> */}
             <Route path="/admin/login" element={<Login />} />
             <Route path="/admin/setpassword" element={<SetPassword />} />
+            <Route path="/admin/developercreatepassword" element={<DeveloperCreatePassword />} />
             <Route path="/admin/forgotpassword" element={<ForgotPassword />} />
           </Routes>
         </Router>
