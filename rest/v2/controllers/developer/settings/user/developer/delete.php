@@ -12,9 +12,11 @@ if (array_key_exists("roleid", $_GET)) {
   $role->role_aid = $_GET['roleid'];
   $column_name = $data['item'];
   checkId($role->role_aid);
+  
 
   $query = checkDelete($role);
   checkDropColumnName($role, $column_name);
+
   returnSuccess($role, "Departments", $query);
 }
 

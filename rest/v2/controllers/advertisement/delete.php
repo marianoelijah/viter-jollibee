@@ -9,13 +9,13 @@ $error = [];
 $returnData = [];
 if (array_key_exists("advertisementid", $_GET)) {
   // get data
-  $advertisement->ads_aid = $_GET['advertisementid'];
-  checkId($advertisement->ads_aid);
+  $advertisement->advertisement_aid = $_GET['advertisementid'];
+  checkId($advertisement->advertisement_aid);
   
 
   $query = checkDelete($advertisement);
 
-  returnSuccess($advertisement, "Departments", $query);
+  returnSuccess($advertisement, "advertisement", $query);
 }
 
 // return 404 error if endpoint not available

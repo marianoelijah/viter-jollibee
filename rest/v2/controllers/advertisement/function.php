@@ -1,16 +1,14 @@
 <?php
 
-
-// Read active
+//Read active
 function checkFilterActive($object)
 {
     $query = $object->filterActive();
-    checkQuery($query, "Empty records. (filter activee)");
+    checkQuery($query, "Empty records. (filter active)");
     return $query;
 }
 
-
-// Read active search
+//Read active Search
 function checkFilterActiveSearch($object)
 {
     $query = $object->filterActiveSearch();
@@ -18,10 +16,10 @@ function checkFilterActiveSearch($object)
     return $query;
 }
 
-// Read all active advertisement
+//Read all active advertisement
 function checkReadAllActiveAdvertisement($object)
 {
     $query = $object->readAllActiveAdvertisement();
-    checkQuery($query, "Empty records. (read all active advertisement)");
+    checkQuery($query, "Empty records. (filter active advertisement)");
     return $query;
 }

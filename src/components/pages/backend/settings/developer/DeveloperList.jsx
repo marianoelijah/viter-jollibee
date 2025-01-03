@@ -17,11 +17,13 @@ import IconNoData from "../../partials/IconNoData";
 import IconServerError from "../../partials/IconServerError";
 import ModalArchive from "../../partials/modals/ModalArchive";
 import Pills from "../../partials/Pills";
+import { useInView } from "react-intersection-observer";
+import SearchBarWithFilterStatus from "@/components/partials/SearchBarWithFilterStatus";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { queryDataInfinite } from "@/components/helpers/queryDataInfinite";
-import SearchBarWithFilterStatus from "@/components/partials/SearchBarWithFilterStatus";
-import { useInView } from "react-intersection-observer";
-
+import Status from "@/components/partials/Status";
+import { FaArchive, FaEdit, FaTrash, FaTrashRestoreAlt } from "react-icons/fa";
+import LoadMore from "../../partials/LoadMore";
 
 const DeveloperList = ({ setItemEdit }) => {
   const [id, setIsId] = React.useState("");
@@ -31,59 +33,23 @@ const DeveloperList = ({ setItemEdit }) => {
   const [statusFilter, setStatusFilter] = React.useState("");
   const search = React.useRef({ value: "" });
   const [page, setPage] = React.useState(1);
-  const { ref, inView } = useInView(); // need installation
-  // const [dataItem, setDataItem] = React.useState(null);
-
-  let counter = 1;
-
-  const handleEdit = (item) => {
-    dispatch(setIsAdd(true));
-    setItemEdit(item);
-  };
-
-  const handleDelete = (item) => {
-    dispatch(setIsDelete(true));
-    setIsId(item.role_aid);
-    setDataItem(item);
-  };
-
-  const handleArchive = (item) => {
-    dispatch(setIsArchive(true));
-    setIsId(item.role_aid);
-  };
-
-  const handleRestore = (item) => {
-    dispatch(setIsRestore(true));
-    setIsId(item.role_aid);
-  };
-
-  // const {
-  //   isFetching,
-  //   isLoading,
-  //   error,
-  //   data: result,
-  //   status,
-  // } = useQueryData(
-  //   `/v2/role`, // endpoint
-  //   "get", // method
-  //   "role" // key
-  // );
+  const { ref, inView } = useInView; // need installation
 
   const {
     data: result,
     error,
     fetchNextPage,
     hasNextPage,
-    isLoading,
     isFetching,
+    isLoading,
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ["developerlist", onSearch, isFilter, statusFilter],
+    queryKey: ["Developer", onSearch, isFilter, statusFilter],
     queryFn: async ({ pageParam = 1 }) =>
       await queryDataInfinite(
-        "/v2/developerlist/search",
-        `/v2/developerlist/page/${pageParam}`,
+        "/v2/developer/search",
+        `/v2/developer/page/${pageParam}`,
         isFilter || store.isSearch,
         {
           isFilter,
@@ -108,7 +74,27 @@ const DeveloperList = ({ setItemEdit }) => {
     }
   }, [inView]);
 
+  const handleEdit = (item) => {
+    dispatch(setIsAdd(true));
+    setItemEdit(item);
+  };
 
+  const handleDelete = (item) => {
+    dispatch(setIsDelete(true));
+    setIsId(item.Developer_aid);
+  };
+
+  const handleArchive = (item) => {
+    dispatch(setIsArchive(true));
+    setIsId(item.Developer_aid);
+  };
+
+  const handleRestore = (item) => {
+    dispatch(setIsRestore(true));
+    setIsId(item.Developer_aid);
+  };
+
+  let counter = 1;
   return (
     <>
       <div className="mt-5">
@@ -127,14 +113,13 @@ const DeveloperList = ({ setItemEdit }) => {
         />
       </div>
       <div className="p-4 bg-secondary rounded-md mt-10 border border-line relative">
-        {isFetching && !isLoading && <FetchingSpinner />}
         <div className="table-wrapper custom-scroll">
           <table>
             <thead>
               <tr>
                 <th>#</th>
                 <th>Status</th>
-                <th>Role Name</th>
+                <th>Developer Name</th>
                 <th>Description</th>
                 <th></th>
                 <th></th>
@@ -163,84 +148,80 @@ const DeveloperList = ({ setItemEdit }) => {
               )}
               <></>
               {/* RESULT */}
-              {result?.count > 0 &&
-             
-                result.data.map((item, key) => (
-                  <tr key={key}>
-                    <td>{counter++}.</td>
-                    <td>
-                      {item.developer_is_active === 1 ? (
-                        <Pills text="Active" />
-                      ) : (
-                        <Pills text="Inactive" />
-                      )}
-                    </td>
-                    <td>{item.developer_name}</td>
-                    <td>{item.developer_description}</td>
-                    <td></td>
-                    <td>
-                      <ul className="table-action">
-                        {item.developer_is_active === 1 ? (
-                          <>
-                            <li>
-                              <button
-                                type="button"
-                                className="tooltip"
-                                data-tooltip="Edit"
-                                disabled={isFetching}
-                                onClick={() => handleEdit(item)}
-                              >
-                                <FilePenLine />
-                              </button>
-                            </li>
-                            <li>
-                              <button
-                                type="button"
-                                className="tooltip"
-                                data-tooltip="Archive"
-                                disabled={isFetching}
-                                onClick={() => handleArchive(item)}
-                              >
-                                <Archive />
-                              </button>
-                            </li>
-                          </>
-                        ) : (
-                          <>
-                            <li>
-                              <button
-                                type="button"
-                                className="tooltip"
-                                data-tooltip="Restore"
-                                disabled={isFetching}
-                                onClick={() => handleRestore(item)}
-                              >
-                                <ArchiveRestore />
-                              </button>
-                            </li>
-                            <li>
-                              <button
-                                type="button"
-                                className="tool-tip"
-                                data-tooltip="Delete"
-                                disabled={isFetching}
-                                onClick={() => handleDelete(item)}
-                              >
-                                <Trash2 />
-                              </button>
-                            </li>
-                          </>
-                        )}
-                      </ul>
-                    </td>
-                  </tr>
-                ))}
-                
+              {result?.pages.map((page, pagekey) => (
+                <React.Fragment key={pagekey}>
+                  {page.data.map((item, key) => {
+                    return (
+                      <tr key={key} className="group relative cursor-pointer">
+                        <td className="text-center">{counter++}.</td>
+                        <td>
+                          {item.user_developer_is_active ? (
+                            <Status text={"Active"} />
+                          ) : (
+                            <Status text={"Inactive"} />
+                          )}
+                        </td>
+                        <td>{item.user_developer_is_first_name}</td>
+                        <td
+                          colSpan="100%"
+                          className="opacity-0 group-hover:opacity-100"
+                        >
+                          <div className="flex items-center justify-end gap-3 mr-4">
+                            {item.user_developer_is_active == 1 ? (
+                              <>
+                                <button
+                                  type="button"
+                                  className="tooltip"
+                                  data-tooltip="Edit"
+                                  disabled={isFetching}
+                                  onClick={() => handleEdit(item)}
+                                >
+                                  <FaEdit />
+                                </button>
+                                <button
+                                  type="button"
+                                  className="tooltip"
+                                  data-tooltip="Archive"
+                                  disabled={isFetching}
+                                  onClick={() => handleArchive(item)}
+                                >
+                                  <FaArchive />
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  type="button"
+                                  className="tooltip"
+                                  data-tooltip="Restore"
+                                  disabled={isFetching}
+                                  onClick={() => handleRestore(item)}
+                                >
+                                  <FaTrashRestoreAlt />
+                                </button>
+                                <button
+                                  type="button"
+                                  className="tooltip"
+                                  data-tooltip="Delete"
+                                  disabled={isFetching}
+                                  onClick={() => handleDelete(item)}
+                                >
+                                  <FaTrash />
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </React.Fragment>
+              ))}
             </tbody>
           </table>
 
           <div className="pb-10 text-center flex items-center ">
-            <Loadmore
+            <LoadMore
               fetchNextPage={fetchNextPage}
               isFetchingNextPage={isFetchingNextPage}
               hasNextPage={hasNextPage}
@@ -250,7 +231,6 @@ const DeveloperList = ({ setItemEdit }) => {
               refView={ref}
             />
           </div>
-
         </div>
         {store.isDelete && (
           <ModalDelete

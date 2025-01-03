@@ -9,8 +9,8 @@ $error = [];
 $returnData = [];
 
 if (array_key_exists("advertisementid", $_GET)) {
-  $advertisement->ads_aid = $_GET['advertisementid'];
-  checkId($advertisement->ads_aid);
+  $advertisement->advertisement_aid = $_GET['advertisementid'];
+  checkId($advertisement->advertisement_aid);
   $query = checkReadById($advertisement);
   http_response_code(200);
   getQueriedData($query);

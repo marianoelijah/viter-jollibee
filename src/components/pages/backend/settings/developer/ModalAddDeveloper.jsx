@@ -20,6 +20,7 @@ const ModalAddDeveloper = ({ itemEdit, developerRole }) => {
   const { dispatch, store } = React.useContext(StoreContext);
   const [value, setValue] = React.useState("");
   const { uploadPhoto, handleChangePhoto, photo } = useUploadPhoto("");
+
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -35,11 +36,10 @@ const ModalAddDeveloper = ({ itemEdit, developerRole }) => {
 
       // show error box
       if (!data.success) {
-        dispatch(setError(false));
+        dispatch(setError(true));
         dispatch(setMessage(data.error));
         dispatch(setSuccess(false));
       } else {
-        console.log("Success");
         dispatch(setIsAdd(false));
         dispatch(setSuccess(true));
         dispatch(setMessage("Successful!"));
@@ -60,20 +60,20 @@ const ModalAddDeveloper = ({ itemEdit, developerRole }) => {
     user_developer_email: itemEdit ? itemEdit.user_developer_email : "",
     user_developer_role_id: developerRole[0].role_aid,
 
-    user_developer_email_old: itemEdit
-      ? itemEdit`${itemEdit.user_developer_first_name} ${itemEdit.user_developer_last_name}`
-      : "",
+    user_developer_email_old: itemEdit ? itemEdit.user_developer_email : "",
     user_developer_name_old: itemEdit
       ? `${itemEdit.user_developer_first_name} ${itemEdit.user_developer_last_name}`
       : "",
   };
 
   const yupSchema = Yup.object({
-    user_developer_first_name: Yup.string.required("* Required"),
-    user_developer_last_name: Yup.string.required("* Required"),
-    user_developer_email: Yup.string
-      .required("* Required")
-      .email("Invalid Email"),
+    user_developer_first_name: Yup.string()
+      .matches(/^[A-Za-z]+$/, "Invalid Name")
+      .required("Required"),
+    user_developer_last_name: Yup.string().required("Required"),
+    user_developer_email: Yup.string()
+      .required("Required")
+      .email("Invalid Email."),
   });
 
   return (
@@ -81,7 +81,7 @@ const ModalAddDeveloper = ({ itemEdit, developerRole }) => {
       <ModalWrapper>
         <div className="modal-side absolute top-0 right-0 bg-primary h-[100dvh] w-[300px] border-l border-line">
           <div className="modal-header p-4 flex justify-between items-center">
-            <h5 className="mb-0">{itemEdit ? "Update" : "Add"} User</h5>
+            <h5 className="mb-0">{itemEdit ? "Update" : "Add"} Developer</h5>
             <button onClick={handleClose}>
               <X />
             </button>
@@ -103,21 +103,22 @@ const ModalAddDeveloper = ({ itemEdit, developerRole }) => {
                     <div className="form-wrapper p-4 max-h-[85vh] h-full overflow-y-auto custom-scroll">
                       <div className="input-wrap">
                         <InputText
-                          label="Developer FirstName"
+                          label="Developer First Name"
                           type="text"
                           name="user_developer_first_name"
                         />
                       </div>
 
-                      <div className="input-wrap">
-                        <InputText
-                          label="Last Name"
+                      <div className="input-wrap mt-8">
+                        <InputTextArea
+                          label="Developer Last Name"
                           type="text"
                           name="user_developer_last_name"
                         />
                       </div>
-                      <div className="input-wrap">
-                        <InputText
+
+                      <div className="input-wrap mt-8">
+                        <InputTextArea
                           label="Email"
                           type="text"
                           name="user_developer_email"

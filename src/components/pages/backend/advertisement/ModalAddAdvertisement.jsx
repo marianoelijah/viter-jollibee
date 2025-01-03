@@ -10,23 +10,18 @@ import {
   setSuccess,
 } from "@/components/store/storeAction";
 import { Form, Formik } from "formik";
-import {
-  InputPhotoUpload,
-  InputText,
-  InputTextArea,
-} from "@/components/helpers/FormInputs";
 import * as Yup from "Yup";
+import { InputPhotoUpload, InputText } from "@/components/helpers/FormInputs";
 import useUploadPhoto from "@/components/custom-hook/useUploadPhoto";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryData } from "@/components/helpers/queryData";
 import { imgPath } from "@/components/helpers/functions-general";
 
-const ModalAddAdversitement = ({ itemEdit }) => {
+const ModalAddAdvertisement = ({ isAdvertisementEdit, setIsAdvertisementEdit }) => {
   const { dispatch } = React.useContext(StoreContext);
+  const { uploadPhoto, handleChangePhoto, photo } =
+    useUploadPhoto("/v2/upload-photo");
   const [value, setValue] = React.useState("");
-  const { uploadPhoto, handleChangePhoto, photo } = useUploadPhoto("");
-
-  const queryClient = useQueryClient();
 
   const handleClose = () => {
     dispatch(setIsAdd(false));
@@ -36,13 +31,14 @@ const ModalAddAdversitement = ({ itemEdit }) => {
     setValue(event.target.value);
   };
 
+  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (values) =>
       queryData(
-        itemEdit
-          ? `/v2/advertisement/${itemEdit.ads_aid}`
+        isAdvertisementEdit
+          ? `/v2/advertisement/${isAdvertisementEdit.advertisement_aid}`
           : "/v2/advertisement",
-        itemEdit ? "PUT" : "POST",
+        isAdvertisementEdit ? "PUT" : "POST",
         values
       ),
     onSuccess: (data) => {
@@ -64,10 +60,13 @@ const ModalAddAdversitement = ({ itemEdit }) => {
   });
 
   const initVal = {
-    ads_title: itemEdit ? itemEdit.ads_title : "",
+    advertisement_aid: isAdvertisementEdit ? isAdvertisementEdit.advertisement_aid : "",
+    advertisement_image: isAdvertisementEdit ? isAdvertisementEdit.advertisement_image : "",
+    advertisement_title: isAdvertisementEdit ? isAdvertisementEdit.advertisement_title : "",
   };
+
   const yupSchema = Yup.object({
-    ads_title: Yup.string().required("Required"),
+    advertisement_title: Yup.string().required("Required"),
   });
 
   return (
@@ -75,9 +74,7 @@ const ModalAddAdversitement = ({ itemEdit }) => {
       <ModalWrapper>
         <div className="modal-side absolute top-0 right-0 bg-primary h-[100dvh] w-[300px] border-l border-line">
           <div className="modal-header p-4 flex justify-between items-center">
-            <h5 className="mb-0">
-              {itemEdit ? "Update" : "Add"} Advertisement
-            </h5>
+            <h5 className="mb-0">Add Advertisement</h5>
             <button onClick={handleClose}>
               <X />
             </button>
@@ -89,13 +86,13 @@ const ModalAddAdversitement = ({ itemEdit }) => {
             onSubmit={async (values) => {
               mutation.mutate({
                 ...values,
-                ads_image:
-                  (itemEdit?.ads_image === "" && photo) ||
+                advertisement_image:
+                  (isAdvertisementEdit?.advertisement_image === "" && photo) ||
                   (!photo && "") ||
                   (photo === undefined && "") ||
-                  (photo && itemEdit?.ads_image !== photo?.name)
+                  (photo && isAdvertisementEdit?.advertisement_image !== photo?.name)
                     ? photo?.name || ""
-                    : itemEdit?.ads_image || "",
+                    : isAdvertisementEdit?.advertisement_image || "",
               });
               uploadPhoto();
             }}
@@ -103,20 +100,20 @@ const ModalAddAdversitement = ({ itemEdit }) => {
             {(props) => {
               return (
                 <Form>
-                  <div className="modal-form h-full max-h-[calc(100vh-56px)] grid grid-rows-[1fr_auto]">
+                  <div className="modal-form  h-[calc(100vh-56px)] grid grid-rows-[1fr_auto]">
                     <div className="form-wrapper p-4 max-h-[85vh] h-full overflow-y-auto custom-scroll">
                       <div className="input-wrap">
                         <InputText
                           label="Title"
                           type="text"
-                          name="ads_title"
+                          name="advertisement_title"
                           onChange={handleChange}
                         />
                       </div>
 
                       <div className="input-wrap relative  group input-photo-wrap h-[150px] ">
                         <label htmlFor="">Photo</label>
-                        {itemEdit === null && photo === null ? (
+                        {isAdvertisementEdit === null && photo === null ? (
                           <div className="w-full border border-line rounded-md flex justify-center items-center flex-col h-full">
                             <ImagePlusIcon
                               size={50}
@@ -132,12 +129,17 @@ const ModalAddAdversitement = ({ itemEdit }) => {
                             src={
                               photo
                                 ? URL.createObjectURL(photo) // preview
-                                : imgPath + "/" + itemEdit?.ads_image // check db
+                                : imgPath + "/" + isAdvertisementEdit?.advertisement_image // check db
                             }
-                            alt="employee photo"
-                            className={`group-hover:opacity-30 duration-200 relative object-cover h-full w-full  m-auto `}
+                            alt="advertisement photo"
+                            className={`group-hover:opacity-30 duration-200 relative object-cover h-full w-full  m-auto ${
+                              mutation.isPending
+                                ? "opacity-40 pointer-events-none"
+                                : ""
+                            }`}
                           />
                         )}
+
                         <InputPhotoUpload
                           name="photo"
                           type="file"
@@ -146,9 +148,7 @@ const ModalAddAdversitement = ({ itemEdit }) => {
                           title="Upload photo"
                           onChange={(e) => handleChangePhoto(e)}
                           onDrop={(e) => handleChangePhoto(e)}
-                          className={`opacity-0 absolute top-0 right-0 bottom-0 left-0 rounded-full  m-auto cursor-pointer w-full h-full ${
-                            mutation.isPending ? "pointer-events-none" : ""
-                          }`}
+                          className={`opacity-0 absolute top-0 right-0 bottom-0 left-0 rounded-full  m-auto cursor-pointer w-full h-full`}
                         />
                       </div>
                     </div>
@@ -175,4 +175,4 @@ const ModalAddAdversitement = ({ itemEdit }) => {
   );
 };
 
-export default ModalAddAdversitement;
+export default ModalAddAdvertisement;

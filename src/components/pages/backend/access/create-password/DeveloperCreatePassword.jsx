@@ -1,22 +1,18 @@
-import { getUrlParam, imgPath } from "@/components/helpers/functions-general";
-import {
-  ArrowLeft,
-  CheckCircle2,
-  Eye,
-  EyeOff,
-  ShieldCheck,
-} from "lucide-react";
-import React from "react";
-import { Link } from "react-router-dom";
-import * as Yup from "Yup";
-import { Form, Formik } from "formik";
 import { InputText } from "@/components/helpers/FormInputs";
-import SpinnerButton from "../partials/spinners/SpinnerButton";
+import { getUrlParam, imgPath } from "@/components/helpers/functions-general";
+import { Form, Formik } from "formik";
+import { CheckCircle2, Eye, EyeOff } from "lucide-react";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import * as Yup from "Yup";
+import SpinnerButton from "../../partials/spinners/SpinnerButton";
 import useQueryData from "@/components/custom-hook/useQueryData";
-import { QueryClient, useMutation } from "@tanstack/react-query";
 import { queryData } from "@/components/helpers/queryData";
+import { StoreContext } from "@/components/store/storeContext";
+import { useQueryClient } from "@tanstack/react-query";
 
 const DeveloperCreatePassword = () => {
+  const { dispatch, store } = React.useState(StoreContext);
   const [theme, setTheme] = React.useState(localStorage.getItem("theme"));
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
@@ -31,26 +27,30 @@ const DeveloperCreatePassword = () => {
   const [specialValidated, setSpecialValidated] = React.useState(false);
   const [lengthValidated, setLengthValidated] = React.useState(false);
   const paramKey = getUrlParam().get("key");
+  const navigate = useNavigate;
+  const queryClient = useQueryClient;
 
   const { isLoading, data: key } = useQueryData(
-    `/v2/developer/key/{$paramKey}`,
+    `/v2/developer/key/${paramKey}`,
     "get",
     "developer/key"
   );
 
-  const mutation = useMutation({
+  const mutation = {
     mutationFn: (values) => queryData(`/v2/developer/password`, "post", values),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queries: ["developer"] });
+      QueryClient.invalidateQueries({
+        queries: ["developer"],
+      });
 
       if (!data.success) {
-        dispatch(setError(true));
-        dispatch(setMessage(data.error));
-      } else {
-        if (Store.isCreatePassSuccess(false));
+        dispatch(setCreatePassSuccess(false));
+        navigate(
+          `${devNavUrl}/create-password-success?redirect=/developer/login`
+        );
       }
     },
-  });
+  };
 
   React.useEffect(() => {
     function setThemeColor() {
@@ -131,7 +131,7 @@ const DeveloperCreatePassword = () => {
 
   return (
     <>
-      <main className="h-screen bg-primary bg-primary center-all">
+      <main className="h-screen bg-primary center-all">
         <div className="login-main bg-secondary max-w-[320px] w-full p-4 border border-line rounded-md ">
           <img
             src={`${imgPath}/jollibee-logo.webp`}
@@ -274,7 +274,7 @@ const DeveloperCreatePassword = () => {
                     </button>
 
                     <Link
-                      to="/"
+                      to="/developer/login"
                       className="text-sm text-center block mt-5 hover:text-accent "
                     >
                       Go Back to Login

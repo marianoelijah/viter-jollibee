@@ -24,9 +24,9 @@ if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
   if (array_key_exists("advertisementid", $_GET)) {
     // check data
     checkPayload($data);
-    $advertisement->ads_aid = $_GET['advertisementid'];
-    $advertisement->ads_is_active = trim($data["isActive"]);
-    checkId($advertisement->ads_aid);
+    $advertisement->advertisement_aid = $_GET['advertisementid'];
+    $advertisement->advertisement_is_active = trim($data["isActive"]);
+    checkId($advertisement->advertisement_aid);
     $query = checkActive($advertisement);
     http_response_code(200);
     returnSuccess($advertisement, "advertisement", $query);

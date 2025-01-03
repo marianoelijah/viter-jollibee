@@ -23,15 +23,11 @@ if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
     checkApiKey();
     checkPayload($data);
 
-
-    $advertisement->ads_search = $data['searchValue'];
-
+    $advertisement->advertisement_search = $data['searchValue'];
     http_response_code(200);
-
-    if ($data['isFilter']) {
-        $advertisement->ads_is_active = checkIndex($data, 'statusFilter');
-
-        if ($advertisement->ads_search != '') {
+    if($data['isFilter']) {
+        $advertisement->advertisement_is_active = checkIndex($data, 'statusFilter');
+        if($advertisement->advertisement_search != '') {
             $query = checkFilterActiveSearch($advertisement);
             getQueriedData($query);
         }
@@ -40,12 +36,12 @@ if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
     }
 
     $query = checkSearch($advertisement);
+    http_response_code(200);
     getQueriedData($query);
 
-
-    // return 404 error if endpoint not available
     checkEndpoint();
 }
+
 
 http_response_code(200);
 // when authentication is cancelled

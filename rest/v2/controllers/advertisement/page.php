@@ -21,19 +21,19 @@ if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
     if (array_key_exists("start", $_GET)) {
         // get data
         // get task id from query string
-        $advertisement->ads_start = $_GET['start'];
-        $advertisement->ads_total = 4;
+        $advertisement->advertisement_start = $_GET['start'];
+        $advertisement->advertisement_total = 3;
         //check to see if task id in query string is not empty and is number, if not return json error
-        checkLimitId($advertisement->ads_start, $advertisement->ads_total);
+        checkLimitId($advertisement->advertisement_start, $advertisement->advertisement_total);
 
-        $query = checkReadLimit($advertisement);
         $total_result = checkReadAll($advertisement);
+        $query = checkReadLimit($advertisement);
         http_response_code(200);
         checkReadQuery(
             $query,
             $total_result,
-            $advertisement->ads_total,
-            $advertisement->ads_start
+            $advertisement->advertisement_total,
+            $advertisement->advertisement_start
         );
     }
     // return 404 error if endpoint not available
