@@ -18,14 +18,14 @@ if (array_key_exists("roleid", $_GET)) {
   $role->role_datetime = date("Y-m-d H:i:s");
   checkId($role->role_aid);
 
-  //checks current data to avoid same entries from being updated
-  $role_name_old = checkIndex($data, 'role_name_old');
-  compareName($role, $role_name_old, $role->role_name);
-  checkId($role->role_aid);
+//checks current data to avoid same entries from being updated
+$role_name_old = checkIndex($data, 'role_name_old');
+compareName($role, $role_name_old, $role->role_name);
+checkId($role->role_aid);
 
   // update
   $query = checkUpdate($role);
-  checkUpdateColumnName($role, $role->role_name, $role_name_old);
+  checkUpdateColumnName($role, $role->role_name, $role_name_old );
   returnSuccess($role, "role", $query);
 }
 

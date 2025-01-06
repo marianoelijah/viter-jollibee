@@ -1,6 +1,5 @@
 import React from "react";
 import { StoreReducer } from "./StoreReducer";
-
 const initVal = {
   error: false,
   info: false,
@@ -14,7 +13,12 @@ const initVal = {
   isDelete: false,
   isAdd: false,
   isView: false,
+  isLogin: false,
+  isLogout: false,
+  isAccountUpdated: false,
+  ceredentials: {},
   isAnimating: true,
+  isCreatePassSuccess: false,
 };
 
 const StoreContext = React.createContext();

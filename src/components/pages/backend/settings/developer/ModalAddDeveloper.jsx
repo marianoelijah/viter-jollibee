@@ -1,32 +1,30 @@
-import * as Yup from "Yup";
-import { StoreContext } from "@/components/store/storeContext";
-import { X } from "lucide-react";
-import React from "react";
-import useUploadPhoto from "@/components/custom-hook/useUploadPhoto";
 import { InputText, InputTextArea } from "@/components/helpers/FormInputs";
 import { queryData } from "@/components/helpers/queryData";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Form, Formik } from "formik";
-import SpinnerButton from "../../partials/spinners/SpinnerButton";
-import ModalWrapper from "../../partials/modals/ModalWrapper";
 import {
   setError,
   setIsAdd,
   setMessage,
   setSuccess,
 } from "@/components/store/storeAction";
+import { StoreContext } from "@/components/store/storeContext";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Form, Formik } from "formik";
+import { X } from "lucide-react";
+import React from "react";
+import * as Yup from "Yup";
+import ModalWrapper from "../../partials/Modals/ModalWrapper";
+import SpinnerButton from "../../partials/spinners/SpinnerButton";
 
 const ModalAddDeveloper = ({ itemEdit, developerRole }) => {
   const { dispatch, store } = React.useContext(StoreContext);
-  const [value, setValue] = React.useState("");
-  const { uploadPhoto, handleChangePhoto, photo } = useUploadPhoto("");
 
   const queryClient = useQueryClient();
-
   const mutation = useMutation({
     mutationFn: (values) =>
       queryData(
-        itemEdit ? `/v2/developer/${itemEdit.developer_aid}` : "/v2/developer",
+        itemEdit
+          ? `/v2/developer/${itemEdit.user_developer_aid}`
+          : "/v2/developer",
         itemEdit ? "PUT" : "POST",
         values
       ),
@@ -40,9 +38,10 @@ const ModalAddDeveloper = ({ itemEdit, developerRole }) => {
         dispatch(setMessage(data.error));
         dispatch(setSuccess(false));
       } else {
+        console.log("Success");
         dispatch(setIsAdd(false));
         dispatch(setSuccess(true));
-        dispatch(setMessage("Successful!"));
+        dispatch(setMessage("added"));
       }
     },
   });
@@ -69,24 +68,22 @@ const ModalAddDeveloper = ({ itemEdit, developerRole }) => {
   const yupSchema = Yup.object({
     user_developer_first_name: Yup.string()
       .matches(/^[A-Za-z]+$/, "Invalid Name")
-      .required("Required"),
-    user_developer_last_name: Yup.string().required("Required"),
-    user_developer_email: Yup.string()
-      .required("Required")
-      .email("Invalid Email."),
+      .required("* Required"),
+    user_developer_last_name: Yup.string()
+      .matches(/^[A-Za-z]+$/, "Invalid Name")
+      .required("* Required"),
+    user_developer_email: Yup.string().required("* Required").email("Invalid Email."),
   });
-
   return (
     <>
       <ModalWrapper>
-        <div className="modal-side absolute top-0 right-0 bg-primary h-[100dvh] w-[300px] border-l border-line">
+        <div className="modal-side fixed absolute top-0 right-0 bg-primary h-[100dvh] w-[300px] border-l border-line">
           <div className="modal-header p-4 flex justify-between items-center">
-            <h5 className="mb-0">{itemEdit ? "Update" : "Add"} Developer</h5>
+            <h5 className="mb-0">{itemEdit ? "Edit" : "Add"} Developer User</h5>
             <button onClick={handleClose}>
               <X />
             </button>
           </div>
-
           <Formik
             initialValues={initVal}
             validationSchema={yupSchema}
@@ -101,38 +98,42 @@ const ModalAddDeveloper = ({ itemEdit, developerRole }) => {
                 <Form>
                   <div className="modal-form h-full max-h-[calc(100vh-56px)] grid grid-rows-[1fr_auto]">
                     <div className="form-wrapper p-4 max-h-[85vh] h-full overflow-y-auto custom-scroll">
-                      <div className="input-wrap">
+                      <div className="input-wrap ">
                         <InputText
-                          label="Developer First Name"
+                          label="First Name"
                           type="text"
                           name="user_developer_first_name"
                         />
                       </div>
-
-                      <div className="input-wrap mt-8">
-                        <InputTextArea
-                          label="Developer Last Name"
+                      <div className="input-wrap">
+                        <InputText
+                          label="Last name"
                           type="text"
                           name="user_developer_last_name"
                         />
                       </div>
-
-                      <div className="input-wrap mt-8">
-                        <InputTextArea
+                      <div className="input-wrap">
+                        <InputText
                           label="Email"
                           type="text"
                           name="user_developer_email"
                         />
                       </div>
                     </div>
-                    <div className="form-action flex p-4 justify-end gap-3">
-                      <button className="btn btn-add" type="submit">
-                        {mutation.isPending ? <SpinnerButton /> : "Save"}
+                    <div className="form-action flex p-4 justify-end gap-5">
+                      <button className="btn btn-accent" type="submit">
+                        {mutation.isPending ? (
+                          <SpinnerButton />
+                        ) : itemEdit ? (
+                          "Save"
+                        ) : (
+                          "Add"
+                        )}
                       </button>
                       <button
                         className="btn btn-cancel"
-                        type="reset"
                         onClick={handleClose}
+                        type="reset"
                       >
                         Cancel
                       </button>

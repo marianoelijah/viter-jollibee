@@ -3,15 +3,14 @@
 require '../../../../../core/header.php';
 // use needed functions
 require '../../../../../core/functions.php';
-// require 'functions.php';
+require 'functions.php';
 // use needed classes
 require '../../../../../models/developer/settings/user/developer/Developer.php';
-// get payload
 // check database connection
 $conn = null;
 $conn = checkDbConnection();
 // make instance of classes
-$role = new Role($conn);
+$developer = new Developer($conn);
 // get payload
 $body = file_get_contents("php://input");
 $data = json_decode($body, true);
@@ -20,28 +19,27 @@ if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
     checkApiKey();
     checkPayload($data);
     // get data
-    $role->role_search = $data["searchValue"];
+    $developer->developer_search = $data["searchValue"];
 
     // // only if filtering
-    // if ($data["isFilter"]) {
+    if ($data["isFilter"]) {
 
-    //     // only if search with filter
-    //     if ($role->role_search != "") {
+        // only if search with filter
+        if ($developer->developer_search != "") {
+            $developer->user_developer_is_active = checkIndex($data, "statusFilter");
+            $query = checkFilterActiveSearch($developer);
+            http_response_code(200);
+            getQueriedData($query);
+        }
 
-    //         $role->role_is_active = checkIndex($data, "role_is_active");
-    //         $query = checkSearchByStatus($role);
-    //         http_response_code(200);
-    //         getQueriedData($query);
-    //     }
+        // if filter only
+        $developer->user_developer_is_active = checkIndex($data, "statusFilter");
+        $query = checkFilterActive($developer);
+        http_response_code(200);
+        getQueriedData($query);
+    }
 
-    //     // if filter only
-    //     $role->role_is_active = checkIndex($data, "role_is_active");
-    //     $query = checkFilterByStatus($role);
-    //     http_response_code(200);
-    //     getQueriedData($query);
-    // }
-
-    $query = checkSearch($role);
+    $query = checkSearch($developer);
     http_response_code(200);
     getQueriedData($query);
     // return 404 error if endpoint not available

@@ -6,8 +6,8 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 
 Header set Access-Control-Allow-Origin *
- 
 
+RewriteRule ^upload-photo$ core/upload-photo.php [L]
 
 RewriteRule ^category$ controllers/category/category.php [L]
 RewriteRule ^category/([0-9]+)$ controllers/category/category.php?categoryid=$1 [L]
@@ -15,22 +15,18 @@ RewriteRule ^category/active/([0-9]+)$ controllers/category/active.php?categoryi
 RewriteRule ^category/page/([0-9]+)$ controllers/category/page.php?start=$1 [L]
 RewriteRule ^category/search$ controllers/category/search.php [L]
 
-
-RewriteRule ^advertisement$ controllers/advertisement/advertisement.php [L]
-RewriteRule ^advertisement/([0-9]+)$ controllers/advertisement/advertisement.php?advertisementid=$1 [L]
-RewriteRule ^advertisement/active/([0-9]+)$ controllers/advertisement/active.php?advertisementid=$1 [L]
-RewriteRule ^advertisement/page/([0-9]+)$ controllers/advertisement/page.php?start=$1 [L]
-RewriteRule ^advertisement/search$ controllers/advertisement/search.php [L]
-RewriteRule ^advertisement/read-all-active-advertisement$ controllers/advertisement/read-all-active-advertisement.php [L]
-
 RewriteRule ^role$ controllers/settings/users/role/role.php [L]
 RewriteRule ^role/([0-9]+)$ controllers/settings/users/role/role.php?roleid=$1 [L]
 RewriteRule ^role/active/([0-9]+)$ controllers/settings/users/role/active.php?roleid=$1 [L]
 
-## DEVELOPER ###
+### developer ###
 RewriteRule ^developer$ controllers/developer/settings/user/developer/developer.php [L]
 RewriteRule ^developer/([0-9]+)$ controllers/developer/settings/user/developer/developer.php?developerid=$1 [L]
 RewriteRule ^developer/active/([0-9]+)$ controllers/developer/settings/user/developer/active.php?developerid=$1 [L]
+RewriteRule ^developer/key/([A-Za-z0-9-]+)$ controllers/developer/settings/user/developer/key.php?developerkey=$1 [L]
+RewriteRule ^developer/password$ controllers/developer/settings/user/developer/set-password.php [L]
+RewriteRule ^developer/login$ controllers/developer/settings/user/developer/login.php [L]
+RewriteRule ^developer/token$ controllers/developer/settings/user/developer/token.php [L]
 RewriteRule ^developer/page/([0-9]+)$ controllers/developer/settings/user/developer/page.php?start=$1 [L]
 RewriteRule ^developer/search$ controllers/developer/settings/user/developer/search.php [L]
 
@@ -40,3 +36,11 @@ RewriteRule ^food/active/([0-9]+)$ controllers/food/active.php?foodid=$1 [L]
 RewriteRule ^food/page/([0-9]+)$ controllers/food/page.php?start=$1 [L]
 RewriteRule ^food/search$ controllers/food/search.php [L]
 RewriteRule ^food/read-food-by-category$ controllers/food/read-food-by-category.php [L]
+
+RewriteRule ^advertisement$ controllers/advertisement/advertisement.php [L]
+RewriteRule ^advertisement/([0-9]+)$ controllers/advertisement/advertisement.php?advertisementid=$1 [L]
+RewriteRule ^advertisement/active/([0-9]+)$ controllers/advertisement/active.php?advertisementid=$1 [L]
+RewriteRule ^advertisement/page/([0-9]+)$ controllers/advertisement/page.php?start=$1 [L]
+RewriteRule ^advertisement/search$ controllers/advertisement/search.php [L]
+RewriteRule ^advertisement/read-all-active-advertisement$ controllers/advertisement/read-all-active-adv.php [L]
+            

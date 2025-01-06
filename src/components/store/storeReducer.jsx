@@ -6,13 +6,11 @@ export const StoreReducer = (state, action) => {
         error: action.payload,
       };
 
-
     case "INFO":
       return {
         ...state,
         info: action.payload,
       };
-
 
     case "MESSAGE":
       return {
@@ -20,13 +18,11 @@ export const StoreReducer = (state, action) => {
         message: action.payload,
       };
 
-
     case "SUCCESS":
       return {
         ...state,
         success: action.payload,
       };
-
 
     case "VALIDATE":
       return {
@@ -34,20 +30,17 @@ export const StoreReducer = (state, action) => {
         validate: action.payload,
       };
 
-
     case "SAVE":
       return {
         ...state,
         isSave: action.payload,
       };
 
-
     case "CONFIRM":
       return {
         ...state,
         isConfirm: action.payload,
       };
-
 
     case "RESTORE":
       return {
@@ -60,13 +53,11 @@ export const StoreReducer = (state, action) => {
         isArchive: action.payload,
       };
 
-
     case "IS_ADD":
       return {
         ...state,
         isAdd: action.payload,
       };
-
 
     case "IS_DELETE":
       return {
@@ -74,29 +65,16 @@ export const StoreReducer = (state, action) => {
         isDelete: action.payload,
       };
 
-
-   
     case "IS_VIEW":
       return {
         ...state,
         isView: action.payload,
       };
 
-
     case "IS_SEARCH":
       return {
         ...state,
         isSearch: action.payload,
-      };
-
-
-   
-
-
-    case "IS_ANIMATING":
-      return {
-        ...state,
-        isAnimating: action.payload,
       };
 
     case "IS_CREATE_PASS_SUCCESS":
@@ -105,18 +83,37 @@ export const StoreReducer = (state, action) => {
         isCreatePassSuccess: action.payload,
       };
 
+    case "IS_ACCOUNT_UPDATED":
+      return {
+        ...state,
+        isAccountUpdated: action.payload,
+      };
 
+    case "IS_LOGIN":
+      return {
+        ...state,
+        isLogin: action.payload,
+      };
 
+    case "IS_LOGOUT":
+      return {
+        ...state,
+        isLogout: action.payload,
+      };
 
-   
+    case "CREDENTIALS":
+      return {
+        ...state,
+        credentials: action.payload,
+      };
 
+    case "IS_ANIMATING":
+      return {
+        ...state,
+        isAnimating: action.payload,
+      };
 
     default:
       return state;
   }
 };
-
-
-
-
-

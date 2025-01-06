@@ -1,7 +1,7 @@
 import { InputText } from "@/components/helpers/FormInputs";
 import { getUrlParam, imgPath } from "@/components/helpers/functions-general";
 import { Form, Formik } from "formik";
-import { CheckCircle2, Eye, EyeOff } from "lucide-react";
+import { CheckCircle2, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "Yup";

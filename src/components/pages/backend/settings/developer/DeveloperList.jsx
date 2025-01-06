@@ -1,39 +1,58 @@
 import useQueryData from "@/components/custom-hook/useQueryData";
-import Loadmore from "@/components/partials/LoadMore";
+import ModalArchive from "@/components/partials/modal/ModalArchive";
 import ModalDelete from "@/components/partials/modal/ModalDelete";
 import ModalRestore from "@/components/partials/modal/ModalRestore";
-import FetchingSpinner from "@/components/partials/spinner/FetchingSpinner";
-import TableLoader from "@/components/partials/TableLoader";
+import { StoreContext } from "@/components/store/storeContext";
+import React from "react";
+import Pills from "../../partials/Pills";
+import { Archive, ArchiveRestore, FilePenLine, Trash2 } from "lucide-react";
+import LoadMore from "../../partials/LoadMore";
+import SpinnerTable from "../../partials/spinners/SpinnerTable";
+import TableLoader from "../../partials/TableLoader";
+import IconNoData from "../../partials/IconNoData";
+import IconServerError from "../../partials/IconServerError";
 import {
   setIsAdd,
   setIsArchive,
   setIsDelete,
   setIsRestore,
 } from "@/components/store/storeAction";
-import { StoreContext } from "@/components/store/storeContext";
-import { Archive, ArchiveRestore, FilePenLine, Trash2 } from "lucide-react";
-import React from "react";
-import IconNoData from "../../partials/IconNoData";
-import IconServerError from "../../partials/IconServerError";
-import ModalArchive from "../../partials/modals/ModalArchive";
-import Pills from "../../partials/Pills";
 import { useInView } from "react-intersection-observer";
-import SearchBarWithFilterStatus from "@/components/partials/SearchBarWithFilterStatus";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { queryDataInfinite } from "@/components/helpers/queryDataInfinite";
+import SearchBarWithFilterStatus from "@/components/partials/SearchBarWithFilterStatus";
 import Status from "@/components/partials/Status";
 import { FaArchive, FaEdit, FaTrash, FaTrashRestoreAlt } from "react-icons/fa";
-import LoadMore from "../../partials/LoadMore";
 
 const DeveloperList = ({ setItemEdit }) => {
-  const [id, setIsId] = React.useState("");
   const { store, dispatch } = React.useContext(StoreContext);
+  const [id, setIsId] = React.useState("");
+  const [dataItem, setDataItem] = React.useState(null);
   const [isFilter, setIsFilter] = React.useState(false);
   const [onSearch, setOnSearch] = React.useState(false);
   const [statusFilter, setStatusFilter] = React.useState("");
   const search = React.useRef({ value: "" });
   const [page, setPage] = React.useState(1);
-  const { ref, inView } = useInView; // need installation
+  const { ref, inView } = useInView();
+  let counter = 1;
+
+  const handleDelete = (item) => {
+    dispatch(setIsDelete(true));
+    setIsId(item.user_developer_aid);
+    setDataItem(item);
+  };
+  const handleEdit = (item) => {
+    dispatch(setIsAdd(true));
+    setItemEdit(item);
+  };
+  const handleRestore = (item) => {
+    dispatch(setIsRestore(true));
+    setIsId(item.user_developer_aid);
+  };
+  const handleArchive = (item) => {
+    dispatch(setIsArchive(true));
+    setIsId(item.user_developer_aid);
+  };
 
   const {
     data: result,
@@ -41,16 +60,15 @@ const DeveloperList = ({ setItemEdit }) => {
     fetchNextPage,
     hasNextPage,
     isFetching,
-    isLoading,
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ["Developer", onSearch, isFilter, statusFilter],
+    queryKey: ["developer", onSearch, isFilter, statusFilter],
     queryFn: async ({ pageParam = 1 }) =>
       await queryDataInfinite(
-        "/v2/developer/search",
-        `/v2/developer/page/${pageParam}`,
-        isFilter || store.isSearch,
+        "/v2/developer/search", // search or filter endpoint
+        `/v2/developer/page/${pageParam}`, //page api/endpoint
+        isFilter || store.isSearch, //search boolean
         {
           isFilter,
           statusFilter,
@@ -61,6 +79,7 @@ const DeveloperList = ({ setItemEdit }) => {
     getNextPageParam: (lastPage) => {
       if (lastPage.page < lastPage.total) {
         return lastPage.page + lastPage.count;
+        ``;
       }
       return;
     },
@@ -73,31 +92,9 @@ const DeveloperList = ({ setItemEdit }) => {
       fetchNextPage();
     }
   }, [inView]);
-
-  const handleEdit = (item) => {
-    dispatch(setIsAdd(true));
-    setItemEdit(item);
-  };
-
-  const handleDelete = (item) => {
-    dispatch(setIsDelete(true));
-    setIsId(item.Developer_aid);
-  };
-
-  const handleArchive = (item) => {
-    dispatch(setIsArchive(true));
-    setIsId(item.Developer_aid);
-  };
-
-  const handleRestore = (item) => {
-    dispatch(setIsRestore(true));
-    setIsId(item.Developer_aid);
-  };
-
-  let counter = 1;
   return (
     <>
-      <div className="mt-5">
+      <div>
         <SearchBarWithFilterStatus
           search={search}
           dispatch={dispatch}
@@ -109,64 +106,65 @@ const DeveloperList = ({ setItemEdit }) => {
           statusFilter={statusFilter}
           setStatusFilter={setStatusFilter}
           setIsFilter={setIsFilter}
-          setPage={setPage}
         />
       </div>
       <div className="p-4 bg-secondary rounded-md mt-10 border border-line relative">
+        {/* {isFetching && !isLoading && <SpinnerTable />} */}
         <div className="table-wrapper custom-scroll">
           <table>
             <thead>
               <tr>
                 <th>#</th>
                 <th>Status</th>
-                <th>Developer Name</th>
-                <th>Description</th>
-                <th></th>
+                <th>Name</th>
+                <th>Email</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {/* LOADING */}
+              {/* loading or no data */}
               {(status === "pending" || result?.pages[0].data.length === 0) && (
                 <tr>
-                  <td colSpan="100%" className="p-10">
+                  <td colSpan={100} className="p-10">
                     {status === "pending" ? (
-                      <TableLoader cols={2} count={20} />
+                      <TableLoader cols={3} count={20} />
                     ) : (
                       <IconNoData />
                     )}
                   </td>
                 </tr>
               )}
-              {/* ERROR */}
               {error && (
                 <tr>
-                  <td colSpan="100%">
+                  <td colSpan={100}>
                     <IconServerError />
                   </td>
                 </tr>
               )}
-              <></>
-              {/* RESULT */}
-              {result?.pages.map((page, pagekey) => (
-                <React.Fragment key={pagekey}>
+              {/* result */}
+              {result?.pages.map((page, pageKey) => (
+                <React.Fragment key={pageKey}>
                   {page.data.map((item, key) => {
                     return (
                       <tr key={key} className="group relative cursor-pointer">
-                        <td className="text-center">{counter++}.</td>
+                        <td className="text-center">{counter++}</td>
                         <td>
-                          {item.user_developer_is_active ? (
-                            <Status text={"Active"} />
+                          {item.user_developer_is_active === 1 ? (
+                            <Status text="Active" />
                           ) : (
-                            <Status text={"Inactive"} />
+                            <Status text="inActive" />
                           )}
                         </td>
-                        <td>{item.user_developer_is_first_name}</td>
+                        <td>
+                          {item.user_developer_first_name}{" "}
+                          {item.user_developer_last_name}
+                        </td>
+                        <td>{item.user_developer_email}</td>
                         <td
-                          colSpan="100%"
+                          colSpan={100}
                           className="opacity-0 group-hover:opacity-100"
                         >
-                          <div className="flex items-center justify-end gap-3 mr-4">
+                          <div className="flex items-center justify-end gap-2 mr-5">
                             {item.user_developer_is_active == 1 ? (
                               <>
                                 <button
@@ -220,41 +218,32 @@ const DeveloperList = ({ setItemEdit }) => {
             </tbody>
           </table>
 
-          <div className="pb-10 text-center flex items-center ">
-            <LoadMore
-              fetchNextPage={fetchNextPage}
-              isFetchingNextPage={isFetchingNextPage}
-              hasNextPage={hasNextPage}
-              result={result?.pages[0]}
-              setPage={setPage}
-              page={page}
-              refView={ref}
-            />
-          </div>
+          <LoadMore />
         </div>
-        {store.isDelete && (
-          <ModalDelete
-            setIsDelete={setIsDelete}
-            mysqlApiDelete={`/v2/developer/${id}`}
-            queryKey={"developer"}
-            item={dataItem.developer_name}
-          />
-        )}
-        {store.isArchive && (
-          <ModalArchive
-            setIsArchive={setIsArchive}
-            mysqlEndpoint={`/v2/developer/active/${id}`}
-            queryKey={"developer"}
-          />
-        )}
-        {store.isRestore && (
-          <ModalRestore
-            setIsRestore={setIsRestore}
-            mysqlEndpoint={`/v2/developer/active/${id}`}
-            queryKey={"developer"}
-          />
-        )}
       </div>
+
+      {store.isDelete && (
+        <ModalDelete
+          setIsDelete={setIsDelete}
+          mysqlApiDelete={`/v2/developer/${id}`}
+          queryKey={"developer"}
+          item={dataItem.developer_name}
+        />
+      )}
+      {store.isRestore && (
+        <ModalRestore
+          setIsRestore={setIsRestore}
+          mysqlEndpoint={`/v2/developer/active/${id}`}
+          queryKey={"developer"}
+        />
+      )}
+      {store.isArchive && (
+        <ModalArchive
+          setIsArchive={setIsArchive}
+          mysqlEndpoint={`/v2/developer/active/${id}`}
+          queryKey={"developer"}
+        />
+      )}
     </>
   );
 };

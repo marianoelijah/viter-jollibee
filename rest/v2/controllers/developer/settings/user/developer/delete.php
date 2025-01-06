@@ -3,21 +3,20 @@
 $conn = null;
 $conn = checkDbConnection();
 // make instance of classes
-$role = new Role($conn);
+$developer = new Developer($conn);
 // get $_GET data
 $error = [];
 $returnData = [];
-if (array_key_exists("roleid", $_GET)) {
+if (array_key_exists("developerid", $_GET)) {
   // get data
-  $role->role_aid = $_GET['roleid'];
+  $developer->user_developer_aid = $_GET['developerid'];
   $column_name = $data['item'];
-  checkId($role->role_aid);
-  
+  checkId($developer->user_developer_aid);
 
-  $query = checkDelete($role);
-  checkDropColumnName($role, $column_name);
 
-  returnSuccess($role, "Departments", $query);
+  $query = checkDelete($developer);
+  checkDropColumnName($developer, $column_name);
+  returnSuccess($developer, "Departments", $query);
 }
 
 // return 404 error if endpoint not available

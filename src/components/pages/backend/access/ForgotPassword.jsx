@@ -29,7 +29,7 @@ const ForgotPassword = () => {
     user_email: Yup.string().required("Required").email("Invalid email"),
   });
   return (
-    <main className="h-screen bg-primary bg-primary center-all">
+    <main className="h-screen bg-primary center-all">
       <div className="login-main bg-secondary max-w-[320px] w-full p-4 border border-line rounded-md ">
         <img
           src={`${imgPath}/jollibee-logo.webp`}
