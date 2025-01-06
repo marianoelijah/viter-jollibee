@@ -7,9 +7,10 @@ import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "Yup";
 import SpinnerButton from "../../partials/spinners/SpinnerButton";
 import useQueryData from "@/components/custom-hook/useQueryData";
-import { queryData } from "@/components/helpers/queryData";
 import { StoreContext } from "@/components/store/storeContext";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { setError, setMessage } from "@/components/store/storeAction";
+import { queryData } from "@/components/helpers/queryData";
 
 const DeveloperCreatePassword = () => {
   const { dispatch, store } = React.useState(StoreContext);
@@ -27,8 +28,8 @@ const DeveloperCreatePassword = () => {
   const [specialValidated, setSpecialValidated] = React.useState(false);
   const [lengthValidated, setLengthValidated] = React.useState(false);
   const paramKey = getUrlParam().get("key");
+  const queryClient = useQueryClient();
   const navigate = useNavigate;
-  const queryClient = useQueryClient;
 
   const { isLoading, data: key } = useQueryData(
     `/v2/developer/key/${paramKey}`,
@@ -36,21 +37,21 @@ const DeveloperCreatePassword = () => {
     "developer/key"
   );
 
-  const mutation = {
+  const mutation = useMutation({
     mutationFn: (values) => queryData(`/v2/developer/password`, "post", values),
     onSuccess: (data) => {
-      QueryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queries: ["developer"],
       });
 
       if (!data.success) {
-        dispatch(setCreatePassSuccess(false));
-        navigate(
-          `${devNavUrl}/create-password-success?redirect=/developer/login`
-        );
+        dispatch(setError(true));
+        dispatch(setMessage(data.error));
+      } else {
+        setSuccess(true);
       }
     },
-  };
+  });
 
   React.useEffect(() => {
     function setThemeColor() {
@@ -112,8 +113,9 @@ const DeveloperCreatePassword = () => {
   };
 
   const initVal = {
-    password: "",
+    new_password: "",
     confirm_password: "",
+    key: paramKey,
   };
 
   const yupSchema = Yup.object({
@@ -152,7 +154,8 @@ const DeveloperCreatePassword = () => {
               initialValues={initVal}
               validationSchema={yupSchema}
               onSubmit={async (values) => {
-                console.log(values);
+                mutation.mutate(values);
+                s;
               }}
             >
               {(props) => {
@@ -162,19 +165,19 @@ const DeveloperCreatePassword = () => {
 
                     <div className="input-wrap">
                       <InputText
-                        label="New Password"
+                        label="Password"
                         type={showPassword ? "text" : "password"}
                         className="!py-2"
-                        name="password"
+                        name="new_password"
                         onChange={(e) => handleChangePasswordInput(e)}
                       />
                       {showIconPassword && (
                         <button
                           className="absolute bottom-2.5 right-2"
-                          onClick={() => setShowConfirmPassword(!showPassword)}
+                          onClick={() => setShowPassword(!showPassword)}
                           type="button"
                         >
-                          {showConfirmPassword ? (
+                          {showPassword ? (
                             <EyeOff size={18} />
                           ) : (
                             <Eye size={18} />
@@ -266,11 +269,15 @@ const DeveloperCreatePassword = () => {
 
                     <button
                       className="btn btn-accent w-full center-all mt-5"
-                      onClick={() => setSuccess(true)}
-                      type="sumbit"
+                      // onClick={() => setSuccess(true)}
+                      disabled={
+                        mutation.isPending ||
+                        props.values.new_password === "" ||
+                        props.values.confirm_password === ""
+                      }
+                      type="submit"
                     >
-                      <SpinnerButton />
-                      Set Password
+                      {mutation.isPending ? <SpinnerButton /> : "Set Password"}
                     </button>
 
                     <Link

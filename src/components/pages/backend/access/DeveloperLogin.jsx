@@ -15,7 +15,6 @@ import {
   setError,
   setIsLogin,
   setMessage,
-  setSuccess,
 } from "@/components/store/storeAction";
 import { StoreContext } from "@/components/store/storeContext";
 import { checkRoleToRedirect } from "@/components/helpers/login-functions";
@@ -45,14 +44,12 @@ const DeveloperLogin = () => {
       if (!data.success) {
         dispatch(setError(true));
         dispatch(setMessage(data.error));
-        dispatch(setSuccess(false));
       } else {
         if (store.isLogin) {
           delete data.data[0].user_developer_password;
           delete data.data[0].role_description;
           delete data.data[0].role_created;
           delete data.data[0].role_datetime;
-
 
           dispatch(setCredentials(data.data[0]));
           setStorageRoute(data.data[1]);
@@ -101,7 +98,7 @@ const DeveloperLogin = () => {
               alt=""
               className="w-[150px] mx-auto mb-2"
             />
-            <h5 className="text-center">Welcome to Jollibee Kiosk</h5>
+            <h5 className="text-center">Welcome to Developer Jollibee Kiosk</h5>
 
 
             <Formik

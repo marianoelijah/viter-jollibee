@@ -9,27 +9,27 @@ const SideNavigation = ({ menu }) => {
   const links = [
     {
       title: "Dashboard",
-      slug: "/developer/dashboard",
+      slug: "/admin/dashboard",
       icon: <LayoutDashboard size={20} />,
     },
     {
       title: "Advertisement",
-      slug: "/developer/advertisement",
+      slug: "/admin/advertisement",
       icon: <Megaphone size={20} />,
     },
     {
       title: "Foods",
-      slug: "/developer/foods",
+      slug: "/admin/foods",
       icon: <UtensilsCrossed size={20} />,
     },
     {
       title: "Category",
-      slug: "/developer/category",
+      slug: "/admin/category",
       icon: <ChartColumnStacked size={20} />,
     },
     {
       title: "Settings",
-      slug: "/developer/settings",
+      slug: "/admin/settings",
       icon: <FaCog size={20} />,
     },
   ];

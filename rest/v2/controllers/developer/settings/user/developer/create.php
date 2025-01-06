@@ -16,7 +16,7 @@ $developer->user_developer_first_name = checkIndex($data, "user_developer_first_
 $developer->user_developer_last_name = checkIndex($data, "user_developer_last_name");
 $developer->user_developer_email = checkIndex($data, "user_developer_email");
 $developer->user_developer_role_id = checkIndex($data, "user_developer_role_id");
-$developer->user_developer_key = $encrypt->doHash(rand());
+$developer->user_developer_key = $encrypt->doPasswordHash(rand());
 $developer->user_developer_created = date("Y-m-d H:i:s");
 $developer->user_developer_datetime = date("Y-m-d H:i:s");
 

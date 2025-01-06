@@ -1,6 +1,7 @@
 <?php
 
-class Developer{
+class Developer
+{
     public $user_developer_aid;
     public $user_developer_is_active;
     public $user_developer_first_name;
@@ -26,7 +27,7 @@ class Developer{
     public function __construct($db)
     {
         $this->connection = $db;
-        $this->tblRole = " jollibee_settings_rolee";
+        $this->tblRole = " jollibee_settings_role";
         $this->tblDeveloper = "jollibee_settings_user_developer";
     }
 
